@@ -1,21 +1,21 @@
 version: '3'
 services:
-  mr_offer_db:
+  mr_purchase_request:
     image: mariadb:10.7
     ports:
       - 3308:3308
     restart: unless-stopped
     environment:
       - MARIADB_ROOT_PASSWORD=root
-      - MARIADB_DATABASE=mr_offer_db
+      - MARIADB_DATABASE=mr_purchase_request_db
       - MARIADB_USER=mobility
       - MARIADB_PASSWORD=root
     volumes:
-      - mr_offer_db:/var/lib/mysql
+      - mr_purchase_request_db:/var/lib/mysql
     networks:
       - mobility
 volumes:
-  mr_offer_db:
+  mr_purchase_request_db:
 networks:
   mobility:
     name: mobility
