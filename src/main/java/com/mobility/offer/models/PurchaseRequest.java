@@ -4,6 +4,8 @@ import java.math.BigInteger;
 
 import javax.persistence.*;
 
+import org.springframework.lang.Nullable;
+
 import lombok.*;
 
 @Entity
@@ -28,10 +30,10 @@ public class PurchaseRequest {
     @Column(name="offer_uuid")
     private String offerUuid;
 
-    //Vehicle id (Foreign key) 
+    //The vehicle to be purchased by the company
     @Setter(AccessLevel.PROTECTED)
-    @Column(name="vehicle_id")
-    private Long vehicleId;
+    @OneToOne(cascade=CascadeType.ALL, mappedBy="vehicle_id")
+    private Vehicle vehicle;
     
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
@@ -43,5 +45,14 @@ public class PurchaseRequest {
 
     //Declined
     @Column(name="declined")
+    @Nullable
     private Boolean declined;
+
+    public PurchaseRequest(String purchase_request_uuid, String offer_uuid, Vehicle vehicle, Integer deliveryDate, BigInteger deliveryPrice) {
+        this.uuid = purchase_request_uuid;
+        this.offerUuid = offer_uuid;
+        this.vehicle = vehicle;
+        this.deliveryDate = deliveryDate;
+        this.deliveryPrice = deliveryPrice;
+    }
 }
