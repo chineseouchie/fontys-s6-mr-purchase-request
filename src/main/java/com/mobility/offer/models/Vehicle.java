@@ -1,7 +1,5 @@
 package com.mobility.offer.models;
 
-import java.math.BigInteger;
-
 import javax.persistence.*;
 
 import lombok.*;
@@ -21,7 +19,7 @@ public class Vehicle {
     //Vehicle uuid (microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
     @Column(name="vehicle_uuid")
-    private String vehicleUuid;
+    private String uuid;
 
     //Model name
     @Column(name="model_name")
@@ -39,9 +37,8 @@ public class Vehicle {
     @Column(name="image_url")
     private String imageUrl;
 
-    public Vehicle(Integer id, String vehicleUuid, String modelName, String brandName, String color, String imageUrl) {
-        this.id = id;
-        this.vehicleUuid = vehicleUuid;
+    public Vehicle(String vehicleUuid, String modelName, String brandName, String color, String imageUrl) {
+        this.uuid = vehicleUuid;
         this.modelName = modelName;
         this.brandName = brandName;
         this.color = color;

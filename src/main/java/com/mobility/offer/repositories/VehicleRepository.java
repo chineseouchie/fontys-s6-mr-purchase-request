@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
-    Vehicle getByUuid(String uuid);
+    Vehicle findByUuid(String uuid);
 }
 
 //Ja, deze meuk gaat binnenkort weg. -Jip

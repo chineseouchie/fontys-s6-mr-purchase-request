@@ -4,6 +4,8 @@ import java.math.BigInteger;
 
 import javax.validation.constraints.NotBlank;
 
+import com.mobility.offer.models.Vehicle;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,16 +14,31 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreatePurchaseRequestRequest {
+    //Vehicle information
     //Vehicle uuid
     @NotBlank
     private String vehicleUuid;
-    //The offer's uuid
+    //Vehicle model
     @NotBlank
-    private String offerUuid;
+    private String modelName;
+    //Vehicle brand name
+    @NotBlank
+    private String brandName;
+    //Vehicle color
+    @NotBlank
+    private String color;
+    //Vehicle imageUrl
+    @NotBlank
+    private String imageUrl;
+
+    //Purchase request information
     //Delivery date (unix timestamp)
     @NotBlank
     private Integer deliveryDate;
     //Delivery price
     @NotBlank
     private BigInteger deliveryPrice;
+    //Offer Uuid (to be included in the purchase request)
+    @NotBlank 
+    private String offerUuid;
 }
