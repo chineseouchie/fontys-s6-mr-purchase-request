@@ -33,7 +33,7 @@ public class PurchaseRequest {
     //The vehicle to be purchased by the company
     @Setter(AccessLevel.PROTECTED)
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
     
     //Delivery date (Unix timestamp)

@@ -1,6 +1,6 @@
-package com.mobility.offer.repositories;
+package com.mobility.purchaserequest.repositories;
 
-import com.mobility.offer.models.Vehicle;
+import com.mobility.purchaserequest.models.Vehicle;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

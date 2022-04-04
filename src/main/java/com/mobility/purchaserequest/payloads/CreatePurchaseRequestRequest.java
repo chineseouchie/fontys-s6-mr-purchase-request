@@ -3,6 +3,7 @@ package com.mobility.purchaserequest.payloads;
 import java.math.BigInteger;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,10 +32,10 @@ public class CreatePurchaseRequestRequest {
 
     //Purchase request information
     //Delivery date (unix timestamp)
-    @NotBlank
+    @NotNull
     private Integer deliveryDate;
     //Delivery price
-    @NotBlank
+    @NotNull
     private BigInteger deliveryPrice;
     //Offer Uuid (to be included in the purchase request)
     @NotBlank 

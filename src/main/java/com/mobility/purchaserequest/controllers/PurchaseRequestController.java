@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
 import com.mobility.purchaserequest.payloads.CreatePurchaseRequestRequest;
@@ -20,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/v1/purchase/request")
+@RequestMapping(path = "/api/v1/purchase-request")
 public class PurchaseRequestController {
     private PurchaseRequestRepository purchaseRequestRepository;
     private VehicleRepository vehicleRepository;
@@ -30,12 +31,18 @@ public class PurchaseRequestController {
         this.vehicleRepository = vehicleRepository;
     }
 
+    @GetMapping("")
+	public String index() {
+		return "PurchaseRequestController works.";
+	};
+
+
     @PostMapping(path = "/create")
 	@ResponseBody
     public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
-        Map<String, String> responseBody = new HashMap<>();
         Gson gson = new Gson();
+        HashMap<String, String> responseBody = new HashMap<String, String>();
 
         //Check if the vehicle already exists in the service's database.
         //Use the existing vehicle if it exists. Or create and store a new one.
@@ -65,8 +72,11 @@ public class PurchaseRequestController {
 
             //Create the response
             httpStatusCode = HttpStatus.CREATED;
+
+            System.out.println(gson.toJson(vehicleToPurchase, Vehicle.class));
+
             responseBody.put("purchaseRequestUuid", purchaseRequest.getUuid());
-            responseBody.put("vehicle", gson.toJson(vehicleToPurchase));
+            responseBody.put("vehicle", gson.toJson(vehicleToPurchase, Vehicle.class));
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
