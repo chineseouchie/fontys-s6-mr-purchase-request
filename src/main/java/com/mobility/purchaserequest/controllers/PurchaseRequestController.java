@@ -12,7 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
-import com.mobility.purchaserequest.payloads.CreatePurchaseRequestRequest;
+import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
+import com.mobility.purchaserequest.payloads.response.CreatePurchaseRequestResponse;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
 import com.mobility.purchaserequest.repositories.VehicleRepository;
 
@@ -39,10 +40,9 @@ public class PurchaseRequestController {
 
     @PostMapping(path = "/create")
 	@ResponseBody
-    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
+    public ResponseEntity<CreatePurchaseRequestResponse> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
-        Gson gson = new Gson();
-        HashMap<String, String> responseBody = new HashMap<String, String>();
+        CreatePurchaseRequestResponse response = new CreatePurchaseRequestResponse();
 
         //Check if the vehicle already exists in the service's database.
         //Use the existing vehicle if it exists. Or create and store a new one.
@@ -72,37 +72,31 @@ public class PurchaseRequestController {
 
             //Create the response
             httpStatusCode = HttpStatus.CREATED;
-
-            System.out.println(gson.toJson(vehicleToPurchase, Vehicle.class));
-
-            responseBody.put("purchaseRequestUuid", purchaseRequest.getUuid());
-            responseBody.put("vehicle", gson.toJson(vehicleToPurchase, Vehicle.class));
+            response.setPurchaseRequestUuid(purchaseRequest.getUuid());
+            response.setVehicle(vehicleToPurchase);
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
         
-        return new ResponseEntity<Map<String, String>>(responseBody, httpStatusCode);
+        return new ResponseEntity<CreatePurchaseRequestResponse>(response, httpStatusCode);
     }
 
     @GetMapping(path = "/{uuid}")
-    public ResponseEntity<Map<String, String>> getByUuid(@PathVariable(value="uuid") String uuid) {
+    public ResponseEntity<PurchaseRequest> getByUuid(@PathVariable(value="uuid") String uuid) {
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
-        Map<String, String> responseBody = new HashMap<>();
-        Gson gson = new Gson();
+        PurchaseRequest purchaseRequest = null;
 
         try {
-            PurchaseRequest purchaseRequest = this.purchaseRequestRepository.findByUuid(uuid);
+            purchaseRequest = this.purchaseRequestRepository.findByUuid(uuid);
             if(purchaseRequest != null) {
                 httpStatusCode = HttpStatus.FOUND;
-                responseBody.put("purchaseRequest", gson.toJson(responseBody));
             } else {
-                responseBody.put("purchaseRequest", null);
                 httpStatusCode = HttpStatus.NOT_FOUND;
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
         
-        return new ResponseEntity<Map<String, String>>(responseBody, httpStatusCode);
+        return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatusCode);
     }
 }

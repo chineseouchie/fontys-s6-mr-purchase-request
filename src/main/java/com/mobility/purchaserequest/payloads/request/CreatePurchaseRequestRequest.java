@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.payloads;
+package com.mobility.purchaserequest.payloads.request;
 
 import java.math.BigInteger;
 
