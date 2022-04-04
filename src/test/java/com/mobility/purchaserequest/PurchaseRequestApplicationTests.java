@@ -1,10 +1,10 @@
-package com.mobility.offer;
+package com.mobility.purchaserequest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OfferApplicationTests {
+class PurchaseRequestApplicationTests {
 
 	@Test
 	void contextLoads() {
