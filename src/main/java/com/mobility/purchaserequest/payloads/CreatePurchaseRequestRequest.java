@@ -1,10 +1,8 @@
-package com.mobility.offer.payloads;
+package com.mobility.purchaserequest.payloads;
 
 import java.math.BigInteger;
 
 import javax.validation.constraints.NotBlank;
-
-import com.mobility.offer.models.Vehicle;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

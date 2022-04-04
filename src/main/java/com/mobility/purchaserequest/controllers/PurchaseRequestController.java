@@ -1,4 +1,4 @@
-package com.mobility.offer.controllers;
+package com.mobility.purchaserequest.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,11 +9,11 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.google.gson.Gson;
-import com.mobility.offer.models.PurchaseRequest;
-import com.mobility.offer.models.Vehicle;
-import com.mobility.offer.payloads.CreatePurchaseRequestRequest;
-import com.mobility.offer.repositories.PurchaseRequestRepository;
-import com.mobility.offer.repositories.VehicleRepository;
+import com.mobility.purchaserequest.models.PurchaseRequest;
+import com.mobility.purchaserequest.models.Vehicle;
+import com.mobility.purchaserequest.payloads.CreatePurchaseRequestRequest;
+import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.repositories.VehicleRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

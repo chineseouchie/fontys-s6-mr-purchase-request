@@ -1,4 +1,4 @@
-package com.mobility.offer.models;
+package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
 

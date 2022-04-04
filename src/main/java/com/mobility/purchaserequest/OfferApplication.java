@@ -1,4 +1,4 @@
-package com.mobility.offer;
+package com.mobility.purchaserequest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
