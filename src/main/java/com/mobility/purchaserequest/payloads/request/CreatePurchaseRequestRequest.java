@@ -40,4 +40,15 @@ public class CreatePurchaseRequestRequest {
     //Offer Uuid (to be included in the purchase request)
     @NotBlank 
     private String offerUuid;
+
+    public CreatePurchaseRequestRequest(String vehicleUuid, String modelName, String brandName, String color, String imageUrl, Integer deliveryDate, BigInteger deliveryPrice, String offerUuid) {
+        this.vehicleUuid = vehicleUuid;
+        this.modelName = modelName;
+        this.brandName = brandName;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.deliveryDate = deliveryDate;
+        this.deliveryPrice = deliveryPrice;
+        this.offerUuid = offerUuid;
+    }
 }
