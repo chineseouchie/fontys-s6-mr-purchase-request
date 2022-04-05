@@ -3,7 +3,7 @@ services:
   mr_purchase_request_db:
     image: mariadb:10.7
     ports:
-      - 3311:3306
+      - 3312:3306
     restart: unless-stopped
     environment:
       - MARIADB_ROOT_PASSWORD=root

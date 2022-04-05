@@ -38,25 +38,5 @@ public class PurchaseRequestControllerTests {
         mvc = MockMvcBuilders.standaloneSetup(new PurchaseRequestController(this.purchaseRequestRepository, this.vehicleRepository)).build();
     }
 
-    public void testCreatePurchaseRequestCorrectData() throws Exception {
-        MockHttpServletResponse response = mvc.perform(
-            post("/api/v1/purchase-request/create").contentType(MediaType.APPLICATION_JSON).content(
-                jsonPurchaseRequest.write(
-                    new PurchaseRequest(
-                        "a620c13f-c0c1-4ef7-bbd1-fb74464daffb",
-                        "675a7273-0872-42a9-85d8-4bc26a3e4b03",
-                        new Vehicle(
-                            "f68dd708-84ab-4b57-bd32-dc471e67ed50",
-                            "Opel",
-                            "Astra",
-                            "Black",
-                            "opel_astra_black.png"
-                        ),
-                        1649055917,
-                        new BigInteger("28042.00")
-                    )
-                )
-            )
-        );
-    }
+
 }
