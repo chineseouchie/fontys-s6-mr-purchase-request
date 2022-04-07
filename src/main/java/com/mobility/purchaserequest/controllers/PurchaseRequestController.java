@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/api/v1/purchase-request")
 public class PurchaseRequestController {
+    /*
     private PurchaseRequestRepository purchaseRequestRepository;
     private VehicleRepository vehicleRepository;
 
@@ -99,4 +100,5 @@ public class PurchaseRequestController {
         
         return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatusCode);
     }
+    */
 }

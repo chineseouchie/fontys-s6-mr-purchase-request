@@ -36,12 +36,4 @@ public class Vehicle {
     //Image url
     @Column(name="image_url")
     private String imageUrl;
-
-    public Vehicle(String vehicleUuid, String modelName, String brandName, String color, String imageUrl) {
-        this.uuid = vehicleUuid;
-        this.modelName = modelName;
-        this.brandName = brandName;
-        this.color = color;
-        this.imageUrl = imageUrl;
-    }
 }

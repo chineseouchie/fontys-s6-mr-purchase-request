@@ -13,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreatePurchaseRequestRequest {
+    /*
     //Vehicle information
     //Vehicle uuid
     @NotBlank
@@ -51,4 +52,5 @@ public class CreatePurchaseRequestRequest {
         this.deliveryPrice = deliveryPrice;
         this.offerUuid = offerUuid;
     }
+    */
 }
