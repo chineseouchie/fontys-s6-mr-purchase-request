@@ -7,19 +7,14 @@ import lombok.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@Table(name="dealer")
-public class Dealer {
+@Table(name="company")
+public class Company {
     //Id (primary key)
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="dealer_id")
+    @Column(name="company_id")
     private Long id;
-
-    //User uuid (Microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name="user_uuid")
-    private String userUuid;
 
     //Company uuid (Microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
@@ -28,10 +23,4 @@ public class Dealer {
 
     @Column(name="company_name")
     private String companyName;
-
-    @Column(name="user_first_name")
-    private String userFirstName;
-
-    @Column(name="user_last_name")
-    private String userLastName;
 }
