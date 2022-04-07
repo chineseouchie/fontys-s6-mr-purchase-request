@@ -25,16 +25,13 @@ public class PurchaseRequest {
     @Column(name="purchase_request_uuid")
     private String uuid;
 
-    //Offer uuid (Microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name="offer_uuid")
-    private String offerUuid;
-
-    //The vehicle to be purchased by the company
-    @Setter(AccessLevel.PROTECTED)
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id")
-    private Vehicle vehicle;
+    @JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
+    private Offer offer;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dealer_id", referencedColumnName = "dealer_id")
+    private Dealer dealer;
     
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
@@ -44,16 +41,8 @@ public class PurchaseRequest {
     @Column(name="delivery_price")
     private BigInteger deliveryPrice;
 
-    //Declined
-    @Column(name="declined")
+    //Accepted
+    @Column(name="accepted")
     @Nullable
-    private Boolean declined;
-
-    public PurchaseRequest(String purchase_request_uuid, String offer_uuid, Vehicle vehicle, Integer deliveryDate, BigInteger deliveryPrice) {
-        this.uuid = purchase_request_uuid;
-        this.offerUuid = offer_uuid;
-        this.vehicle = vehicle;
-        this.deliveryDate = deliveryDate;
-        this.deliveryPrice = deliveryPrice;
-    }
+    private Boolean accepted;
 }

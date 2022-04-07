@@ -7,6 +7,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreatePurchaseRequestResponse {
+    /*
     private String purchaseRequestUuid;
     private Vehicle vehicle;
+    */
 }
