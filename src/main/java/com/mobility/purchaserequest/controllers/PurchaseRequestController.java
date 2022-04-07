@@ -24,6 +24,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/api/v1/purchase-request")
 public class PurchaseRequestController {
+    private 
+
+    @PostMapping(path = "/create")
+    public ResponseEntity<CreatePurchaseRequestResponse> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
+        
+    }
+
+
+
     /*
     private PurchaseRequestRepository purchaseRequestRepository;
     private VehicleRepository vehicleRepository;
@@ -40,7 +49,6 @@ public class PurchaseRequestController {
 
 
     @PostMapping(path = "/create")
-	@ResponseBody
     public ResponseEntity<CreatePurchaseRequestResponse> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
         CreatePurchaseRequestResponse response = new CreatePurchaseRequestResponse();

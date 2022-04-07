@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DealerRepository extends JpaRepository<Dealer, Long> {
-    List<Dealer> findByUserUuid(String dealerUuid);
     List<Dealer> findByCompanyUuid(String companyUuid);
     List<Dealer> findByCompanyName(String companyName);
 }
