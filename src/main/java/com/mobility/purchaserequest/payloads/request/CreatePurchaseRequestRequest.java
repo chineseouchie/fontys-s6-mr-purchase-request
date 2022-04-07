@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
 public class CreatePurchaseRequestRequest {
     @NotBlank
     private String offerUuid;
-    @NotBlank
-    private String vehicleUuid;
     @NotBlank
     private String companyUuid;
     @NotBlank

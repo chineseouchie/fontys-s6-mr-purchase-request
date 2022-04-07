@@ -1,6 +1,7 @@
 package com.mobility.purchaserequest.models;
 
 import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -9,8 +10,8 @@ import org.springframework.lang.Nullable;
 import lombok.*;
 
 @Entity
-@Getter @Setter
 @NoArgsConstructor
+@Getter @Setter
 @Table(name="purchase_request")
 public class PurchaseRequest {
     //Purchase request Id
@@ -30,8 +31,8 @@ public class PurchaseRequest {
     private Offer offer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dealer_id", referencedColumnName = "dealer_id")
-    private Dealer dealer;
+    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
+    private Company company;
     
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
@@ -45,4 +46,12 @@ public class PurchaseRequest {
     @Column(name="accepted")
     @Nullable
     private Boolean accepted;
+
+    public PurchaseRequest(Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice) {
+        this.uuid = UUID.randomUUID().toString();
+        this.offer = offer;
+        this.company = company;
+        this.deliveryDate = deliveryDate;
+        this.deliveryPrice = deliveryPrice;
+    }
 }
