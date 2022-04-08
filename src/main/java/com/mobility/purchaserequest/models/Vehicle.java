@@ -14,7 +14,7 @@ public class Vehicle {
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="vehicle_id")
-    private Integer id;
+    private Long id;
     
     //Vehicle uuid (microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
@@ -36,4 +36,21 @@ public class Vehicle {
     //Image url
     @Column(name="image_url")
     private String imageUrl;
+
+    public Vehicle(String uuid, String modelName, String brandName, String color, String imageUrl) {
+        this.uuid = uuid;
+        this.modelName = modelName;
+        this.brandName = brandName;
+        this.color = color;
+        this.imageUrl = imageUrl;
+    }
+
+    public Vehicle(Long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
+        this.id = id;
+        this.uuid = uuid;
+        this.modelName = modelName;
+        this.brandName = brandName;
+        this.color = color;
+        this.imageUrl = imageUrl;
+    }
 }

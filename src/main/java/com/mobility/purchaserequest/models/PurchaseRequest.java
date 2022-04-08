@@ -54,4 +54,13 @@ public class PurchaseRequest {
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
     }
+
+    public PurchaseRequest(Long id, Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice) {
+        this.id = id;
+        this.uuid = UUID.randomUUID().toString();
+        this.offer = offer;
+        this.company = company;
+        this.deliveryDate = deliveryDate;
+        this.deliveryPrice = deliveryPrice;
+    }
 }

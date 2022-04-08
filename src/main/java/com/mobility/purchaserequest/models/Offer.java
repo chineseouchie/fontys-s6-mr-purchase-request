@@ -37,4 +37,12 @@ public class Offer {
     @Column(name="date")
     @Nullable
     private Integer date;
+
+    public Offer(Long id, String offerUuid, String userUuid, Vehicle vehicle, Integer date) {
+        this.id = id;
+        this.Uuid = offerUuid;
+        this.userUuid = userUuid;
+        this.vehicle = vehicle;
+        this.date = date;
+    }
 }
