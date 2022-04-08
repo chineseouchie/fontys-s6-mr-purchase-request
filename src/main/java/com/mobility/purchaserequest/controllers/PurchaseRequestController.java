@@ -2,6 +2,7 @@ package com.mobility.purchaserequest.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,6 @@ import javax.validation.Valid;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
-import com.mobility.purchaserequest.payloads.request.AcceptPurchaseRequestRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
@@ -98,7 +98,7 @@ public class PurchaseRequestController {
         return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
     }
 
-    @GetMapping("/{purchase_request_uuid}")
+    @GetMapping("/single/{purchase_request_uuid}")
     public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value="purchase_request_uuid") String uuid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         PurchaseRequest purchaseRequest = null;
@@ -111,5 +111,21 @@ public class PurchaseRequestController {
         }
 
         return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
+    }
+
+    @GetMapping("/byoffer/{offer_uuid}")
+    public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value="offer_uuid") String offerUuid){
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        List<PurchaseRequest> purchaseRequests = new ArrayList<PurchaseRequest>();
+
+        try {
+            Offer offer = this.offerRepository.findByUuid(offerUuid);
+            purchaseRequests = this.purchaseRequestRepository.findListByOffer(offer);
+            httpStatus = HttpStatus.OK;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return new ResponseEntity<List<PurchaseRequest>>(purchaseRequests, httpStatus);
     }
 }
