@@ -50,6 +50,8 @@ public class PurchaseRequestControllerTests {
     private OfferRepository offerRepository;
     @Mock
     private VehicleRepository vehicleRepository;
+    @Mock
+    private CompanyRepository companyRepository;
 
     //Tool required to make add JSON to the mock requests
     //This object will be  initialized by the initFields in the setup method.
