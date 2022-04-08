@@ -2,9 +2,13 @@ package com.mobility.purchaserequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mobility.purchaserequest.controllers.PurchaseRequestController;
+import com.mobility.purchaserequest.models.Company;
+import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
+import com.mobility.purchaserequest.repositories.CompanyRepository;
+import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
 import com.mobility.purchaserequest.repositories.VehicleRepository;
 
@@ -38,26 +42,54 @@ public class PurchaseRequestControllerTests {
     //Tool required to make post test requests
     @Autowired
     private MockMvc mvc;
+
     //The mock repositories
     @Mock
     private PurchaseRequestRepository purchaseRequestRepository;
     @Mock
+    private OfferRepository offerRepository;
+    @Mock
     private VehicleRepository vehicleRepository;
+    @Mock
+    private CompanyRepository companyRepository;
 
     //Tool required to make add JSON to the mock requests
     //This object will be  initialized by the initFields in the setup method.
     private JacksonTester<CreatePurchaseRequestRequest> jsonCreatePurchaseRequest;
 
+    //Mock data
+    private Vehicle mockVehicle = new Vehicle(Long.valueOf(1), "va2vuw3a-di38-0dss-abc7-9s2d46d8shod", "Astra", "Opel", "Black", "opel_astra_black.png");
+    private Offer mockOffer = new Offer(Long.valueOf(1), "c621c13f-c0c3-7af7-bad1-fb72264dafzx", "c521cd3f-s0d1-aed7-avd1-sbv426rddffg", mockVehicle, 1649404432);
+    private Company mockCompany = new Company(Long.valueOf(1), "8sh28713f-scbs-9dis-0abd-0ahsihuduwhd", "Very real company LLC.");
+    private PurchaseRequest mockPurchaseRequest = new PurchaseRequest(Long.valueOf(1), mockOffer, mockCompany, 1649404783, new BigInteger("5000.42"));
+
     @BeforeEach
     public void setup() {
-        /*
         JacksonTester.initFields(this, new ObjectMapper());
-        this.mvc = MockMvcBuilders.standaloneSetup(new PurchaseRequestController(this.purchaseRequestRepository, this.vehicleRepository)).build();
-        */
+        this.mvc = MockMvcBuilders.standaloneSetup(new PurchaseRequestController(this.purchaseRequestRepository, this.offerRepository, this.companyRepository)).build();
+        
+        given(this.offerRepository.findByUuid(this.mockOffer.getUuid())).willReturn(this.mockOffer);
+        given(this.vehicleRepository.findByUuid(this.mockVehicle.getUuid())).willReturn(this.mockVehicle);
+        given(this.purchaseRequestRepository.findByUuid(mockPurchaseRequest.getUuid())).willReturn(this.mockPurchaseRequest);
     }
 
     @Test
     public void canCreatePurchaseRequest() throws Exception {
+        CreatePurchaseRequestRequest createPurchaseRequestRequest = new CreatePurchaseRequestRequest();
+        createPurchaseRequestRequest.setCompanyUuid(this.mockCompany.getUuid());
+        createPurchaseRequestRequest.setOfferUuid("sjkash-asdhjashd-asdhj-uahbsaf");
+        createPurchaseRequestRequest.setDeliveryDate(1649404109);
+        createPurchaseRequestRequest.setDeliveryPrice(new BigInteger("5300.99"));
+        
+        /*
+        MockHttpServletResponse response = mvc.perform(
+            post("/api/v1/purchase-request/create").contentType(MediaType.APPLICATION_JSON).content(
+                   jsonCreatePurchaseRequest.write(mockPurchaseRequest.getJson())
+            )
+        );
+        */
+
+
         /*
         //Create & perform the mock post request
         MockHttpServletResponse response = mvc.perform(

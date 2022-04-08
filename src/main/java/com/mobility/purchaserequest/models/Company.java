@@ -23,7 +23,6 @@ public class Company {
 
     @Column(name="company_name")
     private String companyName;
-
     public Company(int id, String uuid, String companyName) {
         this.id = Long.valueOf(id);
         this.uuid = uuid;
