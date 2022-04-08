@@ -41,7 +41,7 @@ public class PurchaseRequestController {
 
         try {
             Offer offer = this.offerRepository.findByUuid(request.getOfferUuid());
-            Company company = this.companyRepository.findByCompanyUuid(request.getCompanyUuid());
+            Company company = this.companyRepository.findByUuid(request.getCompanyUuid());
 
             PurchaseRequest purchaseRequest = new PurchaseRequest(offer, company, request.getDeliveryDate(), request.getDeliveryPrice());
             this.purchaseRequestRepository.save(purchaseRequest);

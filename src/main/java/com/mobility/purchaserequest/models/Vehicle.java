@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -14,7 +17,7 @@ public class Vehicle {
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="vehicle_id")
-    private Integer id;
+    private int id;
     
     //Vehicle uuid (microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
@@ -36,4 +39,14 @@ public class Vehicle {
     //Image url
     @Column(name="image_url")
     private String imageUrl;
+
+    public Vehicle(int id, String uuid, String modelName, String brandName, String color, String imageUrl){
+        this.id = id;
+        this.uuid = uuid;
+        this.modelName = modelName;
+        this.brandName = brandName;
+        this.color = color;
+        this.imageUrl = imageUrl;
+
+    }
 }

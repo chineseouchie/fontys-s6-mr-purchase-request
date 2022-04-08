@@ -19,8 +19,14 @@ public class Company {
     //Company uuid (Microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
     @Column(name="company_uuid")
-    private String companyUuid;
+    private String uuid;
 
     @Column(name="company_name")
     private String companyName;
+
+    public Company(int id, String uuid, String companyName) {
+        this.id = Long.valueOf(id);
+        this.uuid = uuid;
+        this.companyName = companyName;
+    }
 }

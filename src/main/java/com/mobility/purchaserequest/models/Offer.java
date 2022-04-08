@@ -22,7 +22,7 @@ public class Offer {
     //Uuid (Microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
     @Column(name="offer_uuid")
-    private String Uuid;
+    private String uuid;
 
     //User uuid (Microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
@@ -36,5 +36,13 @@ public class Offer {
     //Date (unix timestamp)
     @Column(name="date")
     @Nullable
-    private Integer date;
+    private int date;
+
+    public Offer (Long id, String uuid, String userUuid, Vehicle vehicle, int date){
+        this.id = id;
+        this.uuid = uuid;
+        this.userUuid = userUuid;
+        this.vehicle = vehicle;
+        this.date = date;
+    }
 }
