@@ -1,5 +1,8 @@
 package com.mobility.purchaserequest.controllers;
 
+import com.mobility.purchaserequest.models.PurchaseRequestCompany;
+import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestByDealerResponse;
+import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -21,18 +24,59 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(path = "/api/v1/purchase-request")
 public class PurchaseRequestController {
+    private PurchaseRequestCompanyRepository purchaseRequestCompanyRepository;
     private PurchaseRequestRepository purchaseRequestRepository;
     private OfferRepository offerRepository;
     private CompanyRepository companyRepository;
 
-    public PurchaseRequestController(PurchaseRequestRepository purchaseRequestRepository, OfferRepository offerRepository, CompanyRepository companyRepository) {
+    public PurchaseRequestController(PurchaseRequestRepository purchaseRequestRepository, OfferRepository offerRepository, CompanyRepository companyRepository, PurchaseRequestCompanyRepository purchaseRequestCompanyRepository) {
         this.purchaseRequestRepository = purchaseRequestRepository;
         this.offerRepository = offerRepository;
         this.companyRepository = companyRepository;
+        this.purchaseRequestCompanyRepository = purchaseRequestCompanyRepository;
     }
+
+    @GetMapping(value = "/dealer/requests")
+    public ResponseEntity<List<GetPurchaseRequestByDealerResponse>> getPurchaseRequests(@RequestHeader ("authorization") String jwt) {
+        System.out.println(jwt);
+        HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
+         Company company = companyRepository.findByUuid(jwt);
+
+        try {
+            List<GetPurchaseRequestByDealerResponse> response = new ArrayList<>();
+            System.out.println(company.getId());
+            purchaseRequestCompanyRepository.getAllByCompanyId(company.getId());
+
+            return new ResponseEntity<>(response, httpStatusCode);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+//        try {
+//            List<PurchaseRequestCompany> list = PurchaseRequestRepository.findAll();
+//
+//            if(list != null) {
+//                response = GetVehicleResponse.convertVehicleList(list);
+//
+//                // Sends vehicle to message bus (RabbitMQ)
+//                list.forEach(vehicle -> {
+//                    RabbitMQService.publishCreateVehicle(vehicle);
+//                });
+//
+//                httpStatusCode = HttpStatus.OK
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+//        }
+//
+
+    }
+
 
 //    @PostMapping(path = "/create")
 //    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {

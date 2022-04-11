@@ -55,10 +55,10 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		vehicleRepository.save(model_s);
 		vehicleRepository.save(m5);
 
-		Company bmw_dealer = new Company("offer_ABC", "BMW Dealer");
-		Company audi_dealer = new Company("offer_DEF", "Audi Dealer");
-		Company opel_dealer = new Company("offer_GHI", "Opel Dealer");
-		Company tesla_dealer = new Company("offer_JKL", "Tesla Dealer");
+		Company bmw_dealer = new Company("company_ABC", "BMW Dealer");
+		Company audi_dealer = new Company("company_DEF", "Audi Dealer");
+		Company opel_dealer = new Company("company_GHI", "Opel Dealer");
+		Company tesla_dealer = new Company("company_JKL", "Tesla Dealer");
 
 		companyRepository.save(bmw_dealer);
 		companyRepository.save(audi_dealer);
