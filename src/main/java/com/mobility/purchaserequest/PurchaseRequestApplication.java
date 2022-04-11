@@ -84,43 +84,28 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
 		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
-		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest(longValue(1), "pprABC", longValue(1));
-		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest(longValue(2), "pprDEF", longValue(1));
-		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest(longValue(3), "pprGHI", longValue(1));
-		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest(longValue(4), "pprJKL", longValue(1));
-		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest(longValue(5), "pprMNO", longValue(1));
-		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest(longValue(6), "pprPQR", longValue(1));
-
-		List<PerformedPurchaseRequest> companiesPr1 = new ArrayList<>();
-		companiesPr1.add(audi_dealer);
-		companiesPr1.add(bmw_dealer);
-		companiesPr1.add(opel_dealer);
-
-		List<PerformedPurchaseRequest> companiesPr2 = new ArrayList<>();
-		companiesPr2.add(audi_dealer);
-		companiesPr2.add(bmw_dealer);
-		companiesPr2.add(tesla_dealer);
-
-		List<PerformedPurchaseRequest> companiesPr3 = new ArrayList<>();
-		companiesPr3.add(tesla_dealer);
-		companiesPr3.add(bmw_dealer);
-		companiesPr3.add(opel_dealer);
-
-		List<PerformedPurchaseRequest> companiesPr4 = new ArrayList<>();
-		companiesPr4.add(audi_dealer);
-		companiesPr4.add(tesla_dealer);
-		companiesPr4.add(opel_dealer);
-
-		prABC.setPerformedPurchaseRequests(companiesPr1);
-		prDEF.setPerformedPurchaseRequests(companiesPr2);
-		prGHI.setPerformedPurchaseRequests(companiesPr3);
-		prJKL.setPerformedPurchaseRequests(companiesPr4);
-
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);
 		purchaseRequestRepository.save(prGHI);
 		purchaseRequestRepository.save(prJKL);
 
+		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest( "pprABC", longValue(1),prABC);
+		//performedPurchaseRequestsRepository.save(ppr1);
+		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest( "pprDEF", longValue(2),prABC);
+		//performedPurchaseRequestsRepository.save(ppr2);
+//		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest(longValue(3), "pprGHI", longValue(3),prABC);
+//		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest(longValue(4), "pprJKL", longValue(4),prABC);
+//		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest(longValue(5), "pprMNO", longValue(1),prDEF);
+//		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest(longValue(6), "pprPQR", longValue(2),prDEF);
+		PerformedPurchaseRequest ppr7 = new PerformedPurchaseRequest( "pprSTU", longValue(4),prDEF);
+
+		performedPurchaseRequestsRepository.save(ppr1);
+		performedPurchaseRequestsRepository.save(ppr2);
+//		performedPurchaseRequestsRepository.save(ppr3);
+//		performedPurchaseRequestsRepository.save(ppr4);
+//		performedPurchaseRequestsRepository.save(ppr5);
+//		performedPurchaseRequestsRepository.save(ppr6);
+		performedPurchaseRequestsRepository.save(ppr7);
 
 	}
 

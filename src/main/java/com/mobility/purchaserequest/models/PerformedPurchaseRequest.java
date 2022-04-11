@@ -39,25 +39,26 @@ public class PerformedPurchaseRequest {
     @Nullable
     private Boolean accepted;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },
-            mappedBy = "performedPurchaseRequests")
+            })
     @JsonIgnore
-    private List<PurchaseRequest> purchaseRequestSet = new ArrayList<>();
+    @JoinColumn(name = "purchase_request_id")
+    private PurchaseRequest purchaseRequest;
 
 
-    public PerformedPurchaseRequest(Long companyId, Boolean accepted) {
+    public PerformedPurchaseRequest(Long companyId, Boolean accepted, PurchaseRequest purchaseRequest) {
         this.uuid = UUID.randomUUID().toString();
         this.companyId = companyId;
         this.accepted = accepted;
+        this.purchaseRequest = purchaseRequest;
     }
 
-    public PerformedPurchaseRequest(Long id, String uuid, Long companyId){
-        this.id = id;
+    public PerformedPurchaseRequest( String uuid, Long companyId, PurchaseRequest purchaseRequest){
         this.uuid = uuid;
         this.companyId = companyId;
+        this.purchaseRequest = purchaseRequest;
     }
 }

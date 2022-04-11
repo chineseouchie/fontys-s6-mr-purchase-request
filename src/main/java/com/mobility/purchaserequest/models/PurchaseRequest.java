@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.Nullable;
 
 import lombok.*;
@@ -30,14 +32,8 @@ public class PurchaseRequest {
     @JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
     private Offer offer;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-        cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-        })
-    @JoinTable(name = "performed_purchase_requests",
-            joinColumns = {@JoinColumn(name = "purchase_request_id")},
-            inverseJoinColumns = {@JoinColumn(name = "performed_purchase_request_id")})
+    @OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SELECT)
     private List<PerformedPurchaseRequest> performedPurchaseRequests = new ArrayList<>();
 
     //Delivery date (Unix timestamp)
