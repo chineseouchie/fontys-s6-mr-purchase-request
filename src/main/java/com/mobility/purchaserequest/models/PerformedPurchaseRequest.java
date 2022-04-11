@@ -19,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name="performed_purchase_requests")
 public class PerformedPurchaseRequest {
+
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,7 @@ public class PerformedPurchaseRequest {
     private String uuid;
 
     @Column(name="company_id")
-    private String companyId;
+    private Long companyId;
 
     //Accepted
     @Column(name="accepted")
@@ -48,16 +49,15 @@ public class PerformedPurchaseRequest {
     private List<PurchaseRequest> purchaseRequestSet = new ArrayList<>();
 
 
-    public PerformedPurchaseRequest(String companyId, Boolean accepted) {
+    public PerformedPurchaseRequest(Long companyId, Boolean accepted) {
         this.uuid = UUID.randomUUID().toString();
         this.companyId = companyId;
         this.accepted = accepted;
     }
 
-    public PerformedPurchaseRequest(Long id, String uuid, String companyId, Boolean accepted){
+    public PerformedPurchaseRequest(Long id, String uuid, Long companyId){
         this.id = id;
         this.uuid = uuid;
         this.companyId = companyId;
-        this.accepted = accepted;
     }
 }

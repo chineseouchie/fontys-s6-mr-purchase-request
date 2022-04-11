@@ -4,6 +4,7 @@ import com.mobility.purchaserequest.models.*;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.repositories.PerformedPurchaseRequestsRepository;
 import com.mobility.purchaserequest.repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,6 +32,9 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 
 	@Autowired
 	private PurchaseRequestRepository purchaseRequestRepository;
+
+	@Autowired
+	private PerformedPurchaseRequestsRepository performedPurchaseRequestsRepository;
 
 
 	public static void main(String[] args) {
@@ -80,30 +84,37 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
 		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
-//		List<PerformedPurchaseRequest> companiesPr1 = new ArrayList<>();
-//		companiesPr1.add(audi_dealer);
-//		companiesPr1.add(bmw_dealer);
-//		companiesPr1.add(opel_dealer);
-//
-//		List<PerformedPurchaseRequest> companiesPr2 = new ArrayList<>();
-//		companiesPr2.add(audi_dealer);
-//		companiesPr2.add(bmw_dealer);
-//		companiesPr2.add(tesla_dealer);
-//
-//		List<PerformedPurchaseRequest> companiesPr3 = new ArrayList<>();
-//		companiesPr3.add(tesla_dealer);
-//		companiesPr3.add(bmw_dealer);
-//		companiesPr3.add(opel_dealer);
-//
-//		List<PerformedPurchaseRequest> companiesPr4 = new ArrayList<>();
-//		companiesPr4.add(audi_dealer);
-//		companiesPr4.add(tesla_dealer);
-//		companiesPr4.add(opel_dealer);
-//
-//		prABC.setPerformedPurchaseRequests(companiesPr1);
-//		prDEF.setPerformedPurchaseRequests(companiesPr2);
-//		prGHI.setPerformedPurchaseRequests(companiesPr3);
-//		prJKL.setPerformedPurchaseRequests(companiesPr4);
+		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest(longValue(1), "pprABC", longValue(1));
+		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest(longValue(2), "pprDEF", longValue(1));
+		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest(longValue(3), "pprGHI", longValue(1));
+		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest(longValue(4), "pprJKL", longValue(1));
+		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest(longValue(5), "pprMNO", longValue(1));
+		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest(longValue(6), "pprPQR", longValue(1));
+
+		List<PerformedPurchaseRequest> companiesPr1 = new ArrayList<>();
+		companiesPr1.add(audi_dealer);
+		companiesPr1.add(bmw_dealer);
+		companiesPr1.add(opel_dealer);
+
+		List<PerformedPurchaseRequest> companiesPr2 = new ArrayList<>();
+		companiesPr2.add(audi_dealer);
+		companiesPr2.add(bmw_dealer);
+		companiesPr2.add(tesla_dealer);
+
+		List<PerformedPurchaseRequest> companiesPr3 = new ArrayList<>();
+		companiesPr3.add(tesla_dealer);
+		companiesPr3.add(bmw_dealer);
+		companiesPr3.add(opel_dealer);
+
+		List<PerformedPurchaseRequest> companiesPr4 = new ArrayList<>();
+		companiesPr4.add(audi_dealer);
+		companiesPr4.add(tesla_dealer);
+		companiesPr4.add(opel_dealer);
+
+		prABC.setPerformedPurchaseRequests(companiesPr1);
+		prDEF.setPerformedPurchaseRequests(companiesPr2);
+		prGHI.setPerformedPurchaseRequests(companiesPr3);
+		prJKL.setPerformedPurchaseRequests(companiesPr4);
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);
