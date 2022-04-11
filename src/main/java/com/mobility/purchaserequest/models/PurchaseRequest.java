@@ -7,60 +7,59 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.lang.Nullable;
 
 import lombok.*;
 
 @Entity
 @NoArgsConstructor
-@Getter @Setter
-@Table(name="purchase_request")
+@Getter
+@Setter
+@Table(name = "purchase_request")
 public class PurchaseRequest {
-    //Purchase request Id
-    @Id
-    @Setter(AccessLevel.PROTECTED)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="purchase_request_id")
-    private Long id;
+	// Purchase request Id
+	@Id
+	@Setter(AccessLevel.PROTECTED)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "purchase_request_id")
+	private Long id;
 
-    //Purchase request uuid (Microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name="purchase_request_uuid")
-    private String uuid;
+	// Purchase request uuid (Microservice foreign key)
+	@Setter(AccessLevel.PROTECTED)
+	@Column(name = "purchase_request_uuid")
+	private String uuid;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
-    private Offer offer;
+	@OneToOne()
+	@JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
+	private Offer offer;
 
-    @OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SELECT)
-    private List<PerformedPurchaseRequest> performedPurchaseRequests = new ArrayList<>();
+	@OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true)
+	@Fetch(value = FetchMode.SELECT)
+	private List<PerformedPurchaseRequest> performedPurchaseRequests = new ArrayList<>();
 
-    //Delivery date (Unix timestamp)
-    @Column(name="delivery_date")
-    private Integer deliveryDate;
+	// Delivery date (Unix timestamp)
+	@Column(name = "delivery_date")
+	private Integer deliveryDate;
 
-    //Delivery price
-    @Column(name="delivery_price")
-    private BigInteger deliveryPrice;
+	// Delivery price
+	@Column(name = "delivery_price")
+	private BigInteger deliveryPrice;
 
-//    //Accepted
-//    @Column(name="accepted")
-//    @Nullable
-//    private Boolean accepted;
+	// //Accepted
+	// @Column(name="accepted")
+	// @Nullable
+	// private Boolean accepted;
 
-    public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
-        this.uuid = UUID.randomUUID().toString();
-        this.offer = offer;
-        this.deliveryDate = deliveryDate;
-        this.deliveryPrice = deliveryPrice;
-    }
+	public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
+		this.uuid = UUID.randomUUID().toString();
+		this.offer = offer;
+		this.deliveryDate = deliveryDate;
+		this.deliveryPrice = deliveryPrice;
+	}
 
-    public PurchaseRequest(Long id, String uuid, Offer offer, Integer deliveryDate, BigInteger deliveryPrice){
-        this.id = id;
-        this.uuid = uuid;
-        this.offer = offer;
-        this.deliveryDate = deliveryDate;
-        this.deliveryPrice = deliveryPrice;
-    }
+	public PurchaseRequest(String uuid, Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
+		this.uuid = uuid;
+		this.offer = offer;
+		this.deliveryDate = deliveryDate;
+		this.deliveryPrice = deliveryPrice;
+	}
 }

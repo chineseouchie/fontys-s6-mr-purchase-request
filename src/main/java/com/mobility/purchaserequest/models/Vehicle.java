@@ -4,48 +4,46 @@ import javax.persistence.*;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-@Table(name="vehicle")
+@Table(name = "vehicle")
 public class Vehicle {
-    //Vehicle id
-    @Id
-    @Setter(AccessLevel.PROTECTED)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="vehicle_id")
-    private Long id;
-    
-    //Vehicle uuid (microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name="vehicle_uuid")
-    private String uuid;
+	// Vehicle id
+	@Id
+	@Setter(AccessLevel.PROTECTED)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "vehicle_id")
+	private Long id;
 
-    //Model name
-    @Column(name="model_name")
-    private String modelName;
+	// Vehicle uuid (microservice foreign key)
+	@Setter(AccessLevel.PROTECTED)
+	@Column(name = "vehicle_uuid")
+	private String uuid;
 
-    //Brand name
-    @Column(name="brand_name")
-    private String brandName;
+	// Model name
+	@Column(name = "model_name")
+	private String modelName;
 
-    //Color
-    @Column(name="color")
-    private String color;
+	// Brand name
+	@Column(name = "brand_name")
+	private String brandName;
 
-    //Image url
-    @Column(name="image_url")
-    private String imageUrl;
+	// Color
+	@Column(name = "color")
+	private String color;
 
-    public Vehicle(long id, String uuid, String modelName, String brandName, String color, String imageUrl){
-        this.id = id;
-        this.uuid = uuid;
-        this.modelName = modelName;
-        this.brandName = brandName;
-        this.color = color;
-        this.imageUrl = imageUrl;
-    }
+	// Image url
+	@Column(name = "image_url")
+	private String imageUrl;
+
+	public Vehicle(long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
+		this.id = id;
+		this.uuid = uuid;
+		this.modelName = modelName;
+		this.brandName = brandName;
+		this.color = color;
+		this.imageUrl = imageUrl;
+	}
 }

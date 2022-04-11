@@ -11,11 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.*;
 
-import static java.util.UUID.randomUUID;
 import static org.aspectj.runtime.internal.Conversions.longValue;
 
 @SpringBootApplication
@@ -36,22 +33,23 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 	@Autowired
 	private PerformedPurchaseRequestsRepository performedPurchaseRequestsRepository;
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(PurchaseRequestApplication.class, args);
 	}
 
-
 	@Override
 	public void run(String... args) throws Exception {
 
-
-
-		Vehicle serie_3 = new Vehicle(1, "ABC", "3 Serie", "BMW", "Red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle s6 = new Vehicle(2, "DEF", "S6", "Audi", "Blue", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle vectra = new Vehicle(3, "GHI", "Vectra", "Opel", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle model_s = new Vehicle(4, "JKL", "Model S", "Tesla", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle m5 = new Vehicle(5, "MNO", "M5", "BMW", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle serie_3 = new Vehicle(1, "vehicle_ABC", "3 Serie", "BMW", "Red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle s6 = new Vehicle(2, "vehicle_DEF", "S6", "Audi", "Blue",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle vectra = new Vehicle(3, "vehicle_GHI", "Vectra", "Opel", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle model_s = new Vehicle(4, "vehicle_JKL", "Model S", "Tesla", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
 		vehicleRepository.save(serie_3);
 		vehicleRepository.save(s6);
@@ -59,52 +57,54 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		vehicleRepository.save(model_s);
 		vehicleRepository.save(m5);
 
-		Company bmw_dealer = new Company(longValue(1), "ABC", "BMW Dealer");
-		Company audi_dealer = new Company(longValue(2), "DEF", "Audi Dealer");
-		Company opel_dealer = new Company(longValue(3), "GHI", "Opel Dealer");
-		Company tesla_dealer = new Company(longValue(4), "JKL", "Tesla Dealer");
+		Company bmw_dealer = new Company(longValue(1), "offer_ABC", "BMW Dealer");
+		Company audi_dealer = new Company(longValue(2), "offer_DEF", "Audi Dealer");
+		Company opel_dealer = new Company(longValue(3), "offer_GHI", "Opel Dealer");
+		Company tesla_dealer = new Company(longValue(4), "offer_JKL", "Tesla Dealer");
 
 		companyRepository.save(bmw_dealer);
 		companyRepository.save(audi_dealer);
 		companyRepository.save(opel_dealer);
 		companyRepository.save(tesla_dealer);
 
-		Offer offerABC = new Offer(longValue(1), "offerABC", "XYZ", m5, 1649404689);
-		Offer offerDEF = new Offer(longValue(2), "offerDEF", "UVW", s6, 1649404689);
-		Offer offerGHI = new Offer(longValue(3), "offerGHI", "RST", vectra, 1649404689);
-		Offer offerJKL = new Offer(longValue(4), "offerJKL", "TKJ", model_s, 1649404689 );
+		Offer offerABC = new Offer("offerABC", "user_XYZ", m5, 1649404689);
+		Offer offerDEF = new Offer("offerDEF", "user_UVW", s6, 1649404689);
+		Offer offerGHI = new Offer("offerGHI", "user_RST", vectra, 1649404689);
+		Offer offerJKL = new Offer("offerJKL", "user_TKJ", model_s, 1649404689);
 
 		offerRepository.save(offerABC);
 		offerRepository.save(offerDEF);
 		offerRepository.save(offerGHI);
 		offerRepository.save(offerJKL);
 
-		PurchaseRequest prABC = new PurchaseRequest(longValue(1), "prABC", offerABC,  1650404689, BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest(longValue(2), "prDEF", offerDEF,  1650494689, BigInteger.valueOf(126690));
-		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
-		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
+		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689,
+				BigInteger.valueOf(126690));
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);
 		purchaseRequestRepository.save(prGHI);
 		purchaseRequestRepository.save(prJKL);
 
-		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest( "pprABC", longValue(1),prABC);
-		//performedPurchaseRequestsRepository.save(ppr1);
-		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest( "pprDEF", longValue(2),prABC);
-		//performedPurchaseRequestsRepository.save(ppr2);
-//		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest(longValue(3), "pprGHI", longValue(3),prABC);
-//		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest(longValue(4), "pprJKL", longValue(4),prABC);
-//		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest(longValue(5), "pprMNO", longValue(1),prDEF);
-//		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest(longValue(6), "pprPQR", longValue(2),prDEF);
-		PerformedPurchaseRequest ppr7 = new PerformedPurchaseRequest( "pprSTU", longValue(4),prDEF);
+		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest("pprABC", bmw_dealer, prABC);
+		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest("pprDEF", audi_dealer, prABC);
+		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest("pprGHI", opel_dealer, prABC);
+		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest("pprJKL", tesla_dealer, prABC);
+		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest("pprMNO", bmw_dealer, prDEF);
+		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest("pprPQR", audi_dealer, prDEF);
+		PerformedPurchaseRequest ppr7 = new PerformedPurchaseRequest("pprSTU", tesla_dealer, prDEF);
 
 		performedPurchaseRequestsRepository.save(ppr1);
 		performedPurchaseRequestsRepository.save(ppr2);
-//		performedPurchaseRequestsRepository.save(ppr3);
-//		performedPurchaseRequestsRepository.save(ppr4);
-//		performedPurchaseRequestsRepository.save(ppr5);
-//		performedPurchaseRequestsRepository.save(ppr6);
+		performedPurchaseRequestsRepository.save(ppr3);
+		performedPurchaseRequestsRepository.save(ppr4);
+		performedPurchaseRequestsRepository.save(ppr5);
+		performedPurchaseRequestsRepository.save(ppr6);
 		performedPurchaseRequestsRepository.save(ppr7);
 
 	}
