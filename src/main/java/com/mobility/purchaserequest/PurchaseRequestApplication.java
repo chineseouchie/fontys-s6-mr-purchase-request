@@ -4,7 +4,7 @@ import com.mobility.purchaserequest.models.*;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
-import com.mobility.purchaserequest.repositories.PerformedPurchaseRequestsRepository;
+import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import com.mobility.purchaserequest.repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -29,7 +29,7 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 	private PurchaseRequestRepository purchaseRequestRepository;
 
 	@Autowired
-	private PerformedPurchaseRequestsRepository performedPurchaseRequestsRepository;
+	private PurchaseRequestCompanyRepository purchaseRequestCompanyRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PurchaseRequestApplication.class, args);
@@ -85,21 +85,21 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		purchaseRequestRepository.save(prGHI);
 		purchaseRequestRepository.save(prJKL);
 
-		PerformedPurchaseRequest ppr1 = new PerformedPurchaseRequest("pprABC", bmw_dealer, prABC);
-		PerformedPurchaseRequest ppr2 = new PerformedPurchaseRequest("pprDEF", audi_dealer, prABC);
-		PerformedPurchaseRequest ppr3 = new PerformedPurchaseRequest("pprGHI", opel_dealer, prABC);
-		PerformedPurchaseRequest ppr4 = new PerformedPurchaseRequest("pprJKL", tesla_dealer, prABC);
-		PerformedPurchaseRequest ppr5 = new PerformedPurchaseRequest("pprMNO", bmw_dealer, prDEF);
-		PerformedPurchaseRequest ppr6 = new PerformedPurchaseRequest("pprPQR", audi_dealer, prDEF);
-		PerformedPurchaseRequest ppr7 = new PerformedPurchaseRequest("pprSTU", tesla_dealer, prDEF);
+		PurchaseRequestCompany ppr1 = new PurchaseRequestCompany("pprABC", bmw_dealer, prABC);
+		PurchaseRequestCompany ppr2 = new PurchaseRequestCompany("pprDEF", audi_dealer, prABC);
+		PurchaseRequestCompany ppr3 = new PurchaseRequestCompany("pprGHI", opel_dealer, prABC);
+		PurchaseRequestCompany ppr4 = new PurchaseRequestCompany("pprJKL", tesla_dealer, prABC);
+		PurchaseRequestCompany ppr5 = new PurchaseRequestCompany("pprMNO", bmw_dealer, prDEF);
+		PurchaseRequestCompany ppr6 = new PurchaseRequestCompany("pprPQR", audi_dealer, prDEF);
+		PurchaseRequestCompany ppr7 = new PurchaseRequestCompany("pprSTU", tesla_dealer, prDEF);
 
-		performedPurchaseRequestsRepository.save(ppr1);
-		performedPurchaseRequestsRepository.save(ppr2);
-		performedPurchaseRequestsRepository.save(ppr3);
-		performedPurchaseRequestsRepository.save(ppr4);
-		performedPurchaseRequestsRepository.save(ppr5);
-		performedPurchaseRequestsRepository.save(ppr6);
-		performedPurchaseRequestsRepository.save(ppr7);
+		purchaseRequestCompanyRepository.save(ppr1);
+		purchaseRequestCompanyRepository.save(ppr2);
+		purchaseRequestCompanyRepository.save(ppr3);
+		purchaseRequestCompanyRepository.save(ppr4);
+		purchaseRequestCompanyRepository.save(ppr5);
+		purchaseRequestCompanyRepository.save(ppr6);
+		purchaseRequestCompanyRepository.save(ppr7);
 
 	}
 
