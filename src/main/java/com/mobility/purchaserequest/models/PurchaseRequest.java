@@ -34,7 +34,7 @@ public class PurchaseRequest {
 
 	@OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true)
 	@Fetch(value = FetchMode.SELECT)
-	private List<PerformedPurchaseRequest> performedPurchaseRequests = new ArrayList<>();
+	private List<PurchaseRequestCompany> purchaseRequestCompanies = new ArrayList<>();
 
 	// Delivery date (Unix timestamp)
 	@Column(name = "delivery_date")
