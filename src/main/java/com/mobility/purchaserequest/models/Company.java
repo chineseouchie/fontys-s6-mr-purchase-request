@@ -34,13 +34,13 @@ public class Company {
         this.uuid = uuid;
         this.companyName = companyName;
     }
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "companies")
-    @JsonIgnore
-    private List<PurchaseRequest> purchaseRequestSet = new ArrayList<>();
+//    @ManyToMany(fetch = FetchType.LAZY,
+//            cascade = {
+//                    CascadeType.PERSIST,
+//                    CascadeType.MERGE
+//            },
+//            mappedBy = "companies")
+//    @JsonIgnore
+//    private List<PurchaseRequest> purchaseRequestSet = new ArrayList<>();
 
 }

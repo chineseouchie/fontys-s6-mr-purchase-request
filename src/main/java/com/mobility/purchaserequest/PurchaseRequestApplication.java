@@ -1,9 +1,6 @@
 package com.mobility.purchaserequest;
 
-import com.mobility.purchaserequest.models.Company;
-import com.mobility.purchaserequest.models.Offer;
-import com.mobility.purchaserequest.models.PurchaseRequest;
-import com.mobility.purchaserequest.models.Vehicle;
+import com.mobility.purchaserequest.models.*;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
@@ -83,30 +80,30 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
 		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
-		List<Company> companiesPr1 = new ArrayList<>();
-		companiesPr1.add(audi_dealer);
-		companiesPr1.add(bmw_dealer);
-		companiesPr1.add(opel_dealer);
-
-		List<Company> companiesPr2 = new ArrayList<>();
-		companiesPr2.add(audi_dealer);
-		companiesPr2.add(bmw_dealer);
-		companiesPr2.add(tesla_dealer);
-
-		List<Company> companiesPr3 = new ArrayList<>();
-		companiesPr3.add(tesla_dealer);
-		companiesPr3.add(bmw_dealer);
-		companiesPr3.add(opel_dealer);
-
-		List<Company> companiesPr4 = new ArrayList<>();
-		companiesPr4.add(audi_dealer);
-		companiesPr4.add(tesla_dealer);
-		companiesPr4.add(opel_dealer);
-
-		prABC.setCompanies(companiesPr1);
-		prDEF.setCompanies(companiesPr2);
-		prGHI.setCompanies(companiesPr3);
-		prJKL.setCompanies(companiesPr4);
+//		List<PerformedPurchaseRequest> companiesPr1 = new ArrayList<>();
+//		companiesPr1.add(audi_dealer);
+//		companiesPr1.add(bmw_dealer);
+//		companiesPr1.add(opel_dealer);
+//
+//		List<PerformedPurchaseRequest> companiesPr2 = new ArrayList<>();
+//		companiesPr2.add(audi_dealer);
+//		companiesPr2.add(bmw_dealer);
+//		companiesPr2.add(tesla_dealer);
+//
+//		List<PerformedPurchaseRequest> companiesPr3 = new ArrayList<>();
+//		companiesPr3.add(tesla_dealer);
+//		companiesPr3.add(bmw_dealer);
+//		companiesPr3.add(opel_dealer);
+//
+//		List<PerformedPurchaseRequest> companiesPr4 = new ArrayList<>();
+//		companiesPr4.add(audi_dealer);
+//		companiesPr4.add(tesla_dealer);
+//		companiesPr4.add(opel_dealer);
+//
+//		prABC.setPerformedPurchaseRequests(companiesPr1);
+//		prDEF.setPerformedPurchaseRequests(companiesPr2);
+//		prGHI.setPerformedPurchaseRequests(companiesPr3);
+//		prJKL.setPerformedPurchaseRequests(companiesPr4);
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);

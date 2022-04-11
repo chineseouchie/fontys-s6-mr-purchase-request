@@ -35,10 +35,10 @@ public class PurchaseRequest {
             CascadeType.PERSIST,
             CascadeType.MERGE
         })
-    @JoinTable(name = "purchaseRequestsCompanys",
+    @JoinTable(name = "performed_purchase_requests",
             joinColumns = {@JoinColumn(name = "purchase_request_id")},
-            inverseJoinColumns = {@JoinColumn(name = "company_Id")})
-    private List<Company> companies = new ArrayList<>();
+            inverseJoinColumns = {@JoinColumn(name = "performed_purchase_request_id")})
+    private List<PerformedPurchaseRequest> performedPurchaseRequests = new ArrayList<>();
 
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
@@ -48,10 +48,10 @@ public class PurchaseRequest {
     @Column(name="delivery_price")
     private BigInteger deliveryPrice;
 
-    //Accepted
-    @Column(name="accepted")
-    @Nullable
-    private Boolean accepted;
+//    //Accepted
+//    @Column(name="accepted")
+//    @Nullable
+//    private Boolean accepted;
 
     public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
         this.uuid = UUID.randomUUID().toString();
