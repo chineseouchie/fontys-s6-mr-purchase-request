@@ -83,11 +83,6 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
 		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
-		purchaseRequestRepository.save(prABC);
-		purchaseRequestRepository.save(prDEF);
-		purchaseRequestRepository.save(prGHI);
-		purchaseRequestRepository.save(prJKL);
-
 		List<Company> companiesPr1 = new ArrayList<>();
 		companiesPr1.add(audi_dealer);
 		companiesPr1.add(bmw_dealer);
@@ -109,6 +104,15 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		companiesPr4.add(opel_dealer);
 
 		prABC.setCompanies(companiesPr1);
+		prDEF.setCompanies(companiesPr2);
+		prGHI.setCompanies(companiesPr3);
+		prJKL.setCompanies(companiesPr4);
+
+		purchaseRequestRepository.save(prABC);
+		purchaseRequestRepository.save(prDEF);
+		purchaseRequestRepository.save(prGHI);
+		purchaseRequestRepository.save(prJKL);
+
 
 	}
 

@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,6 @@ public class Company {
             },
             mappedBy = "companies")
     @JsonIgnore
-    private Set<PurchaseRequest> purchaseRequestSet = new HashSet<>();
+    private List<PurchaseRequest> purchaseRequestSet = new ArrayList<>();
 
 }

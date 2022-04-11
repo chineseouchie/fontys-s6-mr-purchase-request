@@ -1,10 +1,7 @@
 package com.mobility.purchaserequest.models;
 
 import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -41,7 +38,7 @@ public class PurchaseRequest {
     @JoinTable(name = "purchaseRequestsCompanys",
             joinColumns = {@JoinColumn(name = "purchase_request_id")},
             inverseJoinColumns = {@JoinColumn(name = "company_Id")})
-    private Set<Company> companies = new HashSet<>();
+    private List<Company> companies = new ArrayList<>();
 
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
