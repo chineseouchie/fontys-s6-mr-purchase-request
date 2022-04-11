@@ -1,6 +1,9 @@
 package com.mobility.purchaserequest.models;
 
 import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.*;
@@ -30,10 +33,16 @@ public class PurchaseRequest {
     @JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
     private Offer offer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
-    private Company company;
-    
+    @ManyToMany(fetch = FetchType.LAZY,
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @JoinTable(name = "purchaseRequestsCompanys",
+            joinColumns = {@JoinColumn(name = "purchase_request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "company_Id")})
+    private Set<Company> companies = new HashSet<>();
+
     //Delivery date (Unix timestamp)
     @Column(name="delivery_date")
     private Integer deliveryDate;
@@ -47,19 +56,17 @@ public class PurchaseRequest {
     @Nullable
     private Boolean accepted;
 
-    public PurchaseRequest(Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice) {
+    public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
         this.uuid = UUID.randomUUID().toString();
         this.offer = offer;
-        this.company = company;
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
     }
 
-    public PurchaseRequest(Long id, String uuid, Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice){
+    public PurchaseRequest(Long id, String uuid, Offer offer, Integer deliveryDate, BigInteger deliveryPrice){
         this.id = id;
         this.uuid = uuid;
         this.offer = offer;
-        this.company = company;
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
     }

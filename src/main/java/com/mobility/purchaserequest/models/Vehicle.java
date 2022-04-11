@@ -40,7 +40,7 @@ public class Vehicle {
     @Column(name="image_url")
     private String imageUrl;
 
-    public Vehicle(int id, String uuid, String modelName, String brandName, String color, String imageUrl){
+    public Vehicle(long id, String uuid, String modelName, String brandName, String color, String imageUrl){
         this.id = id;
         this.uuid = uuid;
         this.modelName = modelName;

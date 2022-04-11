@@ -15,9 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.UUID.randomUUID;
 import static org.aspectj.runtime.internal.Conversions.longValue;
@@ -60,10 +58,10 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		vehicleRepository.save(model_s);
 		vehicleRepository.save(m5);
 
-		Company bmw_dealer = new Company(1, "ABC", "BMW Dealer");
-		Company audi_dealer = new Company(2, "DEF", "Audi Dealer");
-		Company opel_dealer = new Company(3, "GHI", "Opel Dealer");
-		Company tesla_dealer = new Company(4, "JKL", "Tesla Dealer");
+		Company bmw_dealer = new Company(longValue(1), "ABC", "BMW Dealer");
+		Company audi_dealer = new Company(longValue(2), "DEF", "Audi Dealer");
+		Company opel_dealer = new Company(longValue(3), "GHI", "Opel Dealer");
+		Company tesla_dealer = new Company(longValue(4), "JKL", "Tesla Dealer");
 
 		companyRepository.save(bmw_dealer);
 		companyRepository.save(audi_dealer);
@@ -80,15 +78,38 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		offerRepository.save(offerGHI);
 		offerRepository.save(offerJKL);
 
-		PurchaseRequest prABC = new PurchaseRequest(longValue(1), "prABC", offerABC, bmw_dealer, 1650404689, BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest(longValue(2), "prDEF", offerDEF, audi_dealer, 1650494689, BigInteger.valueOf(126690));
-		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI, opel_dealer, 1650504689, BigInteger.valueOf(126690));
-		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, tesla_dealer, 1651409689, BigInteger.valueOf(126690));
+		PurchaseRequest prABC = new PurchaseRequest(longValue(1), "prABC", offerABC,  1650404689, BigInteger.valueOf(126690));
+		PurchaseRequest prDEF = new PurchaseRequest(longValue(2), "prDEF", offerDEF,  1650494689, BigInteger.valueOf(126690));
+		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI,  1650504689, BigInteger.valueOf(126690));
+		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);
 		purchaseRequestRepository.save(prGHI);
 		purchaseRequestRepository.save(prJKL);
+
+		List<Company> companiesPr1 = new ArrayList<>();
+		companiesPr1.add(audi_dealer);
+		companiesPr1.add(bmw_dealer);
+		companiesPr1.add(opel_dealer);
+
+		List<Company> companiesPr2 = new ArrayList<>();
+		companiesPr2.add(audi_dealer);
+		companiesPr2.add(bmw_dealer);
+		companiesPr2.add(tesla_dealer);
+
+		List<Company> companiesPr3 = new ArrayList<>();
+		companiesPr3.add(tesla_dealer);
+		companiesPr3.add(bmw_dealer);
+		companiesPr3.add(opel_dealer);
+
+		List<Company> companiesPr4 = new ArrayList<>();
+		companiesPr4.add(audi_dealer);
+		companiesPr4.add(tesla_dealer);
+		companiesPr4.add(opel_dealer);
+
+		prABC.setCompanies(companiesPr1);
+
 	}
 
 }

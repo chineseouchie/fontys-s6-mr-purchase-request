@@ -2,7 +2,12 @@ package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -23,9 +28,18 @@ public class Company {
 
     @Column(name="company_name")
     private String companyName;
-    public Company(int id, String uuid, String companyName) {
+    public Company(Long id, String uuid, String companyName) {
         this.id = Long.valueOf(id);
         this.uuid = uuid;
         this.companyName = companyName;
     }
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "companies")
+    @JsonIgnore
+    private Set<PurchaseRequest> purchaseRequestSet = new HashSet<>();
+
 }
