@@ -13,8 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigInteger;
 
-import static org.aspectj.runtime.internal.Conversions.longValue;
-
 @SpringBootApplication
 public class PurchaseRequestApplication implements CommandLineRunner {
 
@@ -57,10 +55,10 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		vehicleRepository.save(model_s);
 		vehicleRepository.save(m5);
 
-		Company bmw_dealer = new Company(longValue(1), "offer_ABC", "BMW Dealer");
-		Company audi_dealer = new Company(longValue(2), "offer_DEF", "Audi Dealer");
-		Company opel_dealer = new Company(longValue(3), "offer_GHI", "Opel Dealer");
-		Company tesla_dealer = new Company(longValue(4), "offer_JKL", "Tesla Dealer");
+		Company bmw_dealer = new Company("offer_ABC", "BMW Dealer");
+		Company audi_dealer = new Company("offer_DEF", "Audi Dealer");
+		Company opel_dealer = new Company("offer_GHI", "Opel Dealer");
+		Company tesla_dealer = new Company("offer_JKL", "Tesla Dealer");
 
 		companyRepository.save(bmw_dealer);
 		companyRepository.save(audi_dealer);
@@ -77,14 +75,10 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		offerRepository.save(offerGHI);
 		offerRepository.save(offerJKL);
 
-		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689,
-				BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689,
-				BigInteger.valueOf(126690));
-		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689,
-				BigInteger.valueOf(126690));
-		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689,
-				BigInteger.valueOf(126690));
+		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigInteger.valueOf(126690));
+		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigInteger.valueOf(126690));
+		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689, BigInteger.valueOf(126690));
+		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);

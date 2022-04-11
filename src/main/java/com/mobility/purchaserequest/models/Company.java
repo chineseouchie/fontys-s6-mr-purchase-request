@@ -30,6 +30,11 @@ public class Company {
 		this.uuid = uuid;
 		this.companyName = companyName;
 	}
+
+	public Company(String uuid, String companyName) {
+		this.uuid = uuid;
+		this.companyName = companyName;
+	}
 	// @ManyToMany(fetch = FetchType.LAZY,
 	// cascade = {
 	// CascadeType.PERSIST,
