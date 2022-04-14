@@ -80,6 +80,10 @@ public class PurchaseRequestController {
                                 purchaseRequest);
                         purchaseRequestsToCompanies.add(purchaseRequestCompany);
                     }
+
+                    // Save the purchase request
+                    this.purchaseRequestRepository.save(purchaseRequest);
+                    // Save the purchaseRequestCompanies
                     this.purchaseRequestCompanyRepository.saveAll(purchaseRequestsToCompanies);
                     httpStatus = HttpStatus.CREATED;
                     responseBody.put("message", "Succesfully created the purchase requests.");
