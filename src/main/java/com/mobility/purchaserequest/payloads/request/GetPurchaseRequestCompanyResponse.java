@@ -10,18 +10,24 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GetPurchaseRequestByDealerResponse {
+public class GetPurchaseRequestCompanyResponse {
 
     @NotBlank
     private String uuid;
 
     @NotBlank
- 	private Integer deliveryDate;
+ 	private Integer delivery_date;
 
     @NotBlank
-    private BigInteger deliveryPrice;
+    private BigInteger delivery_price;
 
     @NotBlank
-    private String purchaseUuid;
+    private String purchase_request_uuid;
+
+    @NotBlank
+    private String brand_name;
+
+    @NotBlank
+    private String model_name;
 
 }

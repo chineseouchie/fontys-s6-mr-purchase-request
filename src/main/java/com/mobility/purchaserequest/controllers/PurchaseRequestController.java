@@ -1,7 +1,7 @@
 package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
-import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestByDealerResponse;
+import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,21 +41,23 @@ public class PurchaseRequestController {
     }
 
     @GetMapping(value = "/dealer/requests")
-    public ResponseEntity<List<GetPurchaseRequestByDealerResponse>> getPurchaseRequests(@RequestHeader ("authorization") String jwt) {
+    public ResponseEntity<List<GetPurchaseRequestCompanyResponse>> getPurchaseRequests(@RequestHeader ("authorization") String jwt) {
         System.out.println(jwt);
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
          Company company = companyRepository.findByUuid(jwt);
 
         try {
-            List<GetPurchaseRequestByDealerResponse> response = new ArrayList<>();
+            List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
             List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository.getAllByCompanyId(company.getId());
 
             for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
-                GetPurchaseRequestByDealerResponse prbdr = new GetPurchaseRequestByDealerResponse();
-                prbdr.setPurchaseUuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
-                prbdr.setDeliveryDate(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
-                prbdr.setDeliveryPrice(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
+                GetPurchaseRequestCompanyResponse prbdr = new GetPurchaseRequestCompanyResponse();
+                prbdr.setPurchase_request_uuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
+                prbdr.setDelivery_date(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
+                prbdr.setDelivery_price(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
                 prbdr.setUuid(purchaseRequestCompany.getUuid());
+                prbdr.setBrand_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getBrandName());
+                prbdr.setModel_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getModelName());
                 response.add(prbdr);
             }
 
