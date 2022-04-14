@@ -28,7 +28,8 @@ public class PurchaseRequestController {
     private OfferRepository offerRepository;
     private CompanyRepository companyRepository;
 
-    public PurchaseRequestController(PurchaseRequestRepository purchaseRequestRepository, OfferRepository offerRepository, CompanyRepository companyRepository) {
+    public PurchaseRequestController(PurchaseRequestRepository purchaseRequestRepository,
+            OfferRepository offerRepository, CompanyRepository companyRepository) {
         this.purchaseRequestRepository = purchaseRequestRepository;
         this.offerRepository = offerRepository;
         this.companyRepository = companyRepository;
@@ -38,17 +39,42 @@ public class PurchaseRequestController {
     public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         Map<String, String> responseBody = new HashMap<String, String>();
+        responseBody.put("message", "Internal server error.");
 
         try {
             Offer offer = this.offerRepository.findByUuid(request.getOfferUuid());
-            Company company = this.companyRepository.findByUuid(request.getCompanyUuid());
+            if (offer != null && offer.getUuid().equals(request.getOfferUuid())) {
+                List<Company> companies = new ArrayList<Company>();
+                for (String companyUuid : request.getCompanyUuids()) {
+                    Company company = this.companyRepository.findByUuid(companyUuid);
+                    if (company != null) {
+                        companies.add(company);
+                    }
+                }
 
-            PurchaseRequest purchaseRequest = new PurchaseRequest(offer, company, request.getDeliveryDate(), request.getDeliveryPrice());
-            this.purchaseRequestRepository.save(purchaseRequest);
+                if (companies != null && companies.size() != 0) {
+                    List<PurchaseRequest> purchaseRequestsToSave = new ArrayList<PurchaseRequest>();
+                    for (Company company : companies) {
+                        purchaseRequestsToSave.add(
+                                new PurchaseRequest(
+                                        offer,
+                                        company,
+                                        request.getDeliveryDate(),
+                                        request.getDeliveryPrice()));
+                    }
 
-            httpStatus = HttpStatus.OK;
-            responseBody.put("purchase-request-uuid", purchaseRequest.getUuid());
-        } catch(Exception e) {
+                    this.purchaseRequestRepository.saveAll(purchaseRequestsToSave);
+                    httpStatus = HttpStatus.CREATED;
+                    responseBody.put("message", "Succesfully created the purchase requests.");
+                } else {
+                    httpStatus = HttpStatus.NOT_FOUND;
+                    responseBody.put("message", "Invalid company uuid\'s.");
+                }
+            } else {
+                responseBody.put("message", "Invalid offer uuid.");
+                httpStatus = HttpStatus.NOT_FOUND;
+            }
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -62,17 +88,18 @@ public class PurchaseRequestController {
 
         try {
             PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository.findByUuid(purchase_request_uuid);
-            List<PurchaseRequest> purchaseRequestsToDecline = this.purchaseRequestRepository.findListByOffer(purchaseRequestToAccept.getOffer());
-            
+            List<PurchaseRequest> purchaseRequestsToDecline = this.purchaseRequestRepository
+                    .findListByOffer(purchaseRequestToAccept.getOffer());
+
             purchaseRequestToAccept.setAccepted(true);
-            for(PurchaseRequest purchaseRequest : purchaseRequestsToDecline) {
+            for (PurchaseRequest purchaseRequest : purchaseRequestsToDecline) {
                 purchaseRequest.setAccepted(false);
                 this.purchaseRequestRepository.save(purchaseRequest);
             }
 
             httpStatus = HttpStatus.OK;
             responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -88,10 +115,10 @@ public class PurchaseRequestController {
             PurchaseRequest purchaseRequestToDecline = this.purchaseRequestRepository.findByUuid(purchase_request_uuid);
             purchaseRequestToDecline.setAccepted(false);
             this.purchaseRequestRepository.save(purchaseRequestToDecline);
-            
+
             httpStatus = HttpStatus.OK;
             responseBody.put("declined-purchase-request-uuid", purchaseRequestToDecline.getUuid());
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -99,14 +126,14 @@ public class PurchaseRequestController {
     }
 
     @GetMapping("/single/{purchase_request_uuid}")
-    public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value="purchase_request_uuid") String uuid) {
+    public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value = "purchase_request_uuid") String uuid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         PurchaseRequest purchaseRequest = null;
 
         try {
             purchaseRequest = this.purchaseRequestRepository.findByUuid(uuid);
             httpStatus = HttpStatus.FOUND;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -114,7 +141,7 @@ public class PurchaseRequestController {
     }
 
     @GetMapping("/byoffer/{offer_uuid}")
-    public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value="offer_uuid") String offerUuid){
+    public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         List<PurchaseRequest> purchaseRequests = new ArrayList<PurchaseRequest>();
 
@@ -122,7 +149,7 @@ public class PurchaseRequestController {
             Offer offer = this.offerRepository.findByUuid(offerUuid);
             purchaseRequests = this.purchaseRequestRepository.findListByOffer(offer);
             httpStatus = HttpStatus.OK;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 

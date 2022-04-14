@@ -11,19 +11,20 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
-@Getter @Setter
-@Table(name="purchase_request")
+@Getter
+@Setter
+@Table(name = "purchase_request")
 public class PurchaseRequest {
-    //Purchase request Id
+    // Purchase request Id
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="purchase_request_id")
+    @Column(name = "purchase_request_id")
     private Long id;
 
-    //Purchase request uuid (Microservice foreign key)
+    // Purchase request uuid (Microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
-    @Column(name="purchase_request_uuid")
+    @Column(name = "purchase_request_uuid")
     private String uuid;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -33,17 +34,17 @@ public class PurchaseRequest {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id", referencedColumnName = "company_id")
     private Company company;
-    
-    //Delivery date (Unix timestamp)
-    @Column(name="delivery_date")
+
+    // Delivery date (Unix timestamp)
+    @Column(name = "delivery_date")
     private Integer deliveryDate;
 
-    //Delivery price
-    @Column(name="delivery_price")
+    // Delivery price
+    @Column(name = "delivery_price")
     private BigInteger deliveryPrice;
 
-    //Accepted
-    @Column(name="accepted")
+    // Accepted
+    @Column(name = "accepted")
     @Nullable
     private Boolean accepted;
 
@@ -55,7 +56,8 @@ public class PurchaseRequest {
         this.deliveryPrice = deliveryPrice;
     }
 
-    public PurchaseRequest(Long id, String uuid, Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice){
+    public PurchaseRequest(Long id, String uuid, Offer offer, Company company, Integer deliveryDate,
+            BigInteger deliveryPrice) {
         this.id = id;
         this.uuid = uuid;
         this.offer = offer;

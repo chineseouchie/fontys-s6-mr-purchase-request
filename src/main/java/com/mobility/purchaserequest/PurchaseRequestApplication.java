@@ -37,22 +37,23 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 	@Autowired
 	private PurchaseRequestRepository purchaseRequestRepository;
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(PurchaseRequestApplication.class, args);
 	}
 
-
 	@Override
 	public void run(String... args) throws Exception {
 
-
-
-		Vehicle serie_3 = new Vehicle(1, "ABC", "3 Serie", "BMW", "Red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle s6 = new Vehicle(2, "DEF", "S6", "Audi", "Blue", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle vectra = new Vehicle(3, "GHI", "Vectra", "Opel", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle model_s = new Vehicle(4, "JKL", "Model S", "Tesla", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle m5 = new Vehicle(5, "MNO", "M5", "BMW", "red", "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle serie_3 = new Vehicle(Long.valueOf(1), "ABC", "3 Serie", "BMW", "Red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle s6 = new Vehicle(Long.valueOf(2), "DEF", "S6", "Audi", "Blue",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle vectra = new Vehicle(Long.valueOf(3), "GHI", "Vectra", "Opel", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle model_s = new Vehicle(Long.valueOf(4), "JKL", "Model S", "Tesla", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
+		Vehicle m5 = new Vehicle(Long.valueOf(5), "MNO", "M5", "BMW", "red",
+				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
 		vehicleRepository.save(serie_3);
 		vehicleRepository.save(s6);
@@ -73,17 +74,21 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		Offer offerABC = new Offer(longValue(1), "offerABC", "XYZ", m5, 1649404689);
 		Offer offerDEF = new Offer(longValue(2), "offerDEF", "UVW", s6, 1649404689);
 		Offer offerGHI = new Offer(longValue(3), "offerGHI", "RST", vectra, 1649404689);
-		Offer offerJKL = new Offer(longValue(4), "offerJKL", "TKJ", model_s, 1649404689 );
+		Offer offerJKL = new Offer(longValue(4), "offerJKL", "TKJ", model_s, 1649404689);
 
 		offerRepository.save(offerABC);
 		offerRepository.save(offerDEF);
 		offerRepository.save(offerGHI);
 		offerRepository.save(offerJKL);
 
-		PurchaseRequest prABC = new PurchaseRequest(longValue(1), "prABC", offerABC, bmw_dealer, 1650404689, BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest(longValue(2), "prDEF", offerDEF, audi_dealer, 1650494689, BigInteger.valueOf(126690));
-		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI, opel_dealer, 1650504689, BigInteger.valueOf(126690));
-		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, tesla_dealer, 1651409689, BigInteger.valueOf(126690));
+		PurchaseRequest prABC = new PurchaseRequest(longValue(1), "prABC", offerABC, bmw_dealer, 1650404689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prDEF = new PurchaseRequest(longValue(2), "prDEF", offerDEF, audi_dealer, 1650494689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prGHI = new PurchaseRequest(longValue(3), "prGHI", offerGHI, opel_dealer, 1650504689,
+				BigInteger.valueOf(126690));
+		PurchaseRequest prJKL = new PurchaseRequest(longValue(4), "prJKL", offerJKL, tesla_dealer, 1651409689,
+				BigInteger.valueOf(126690));
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);

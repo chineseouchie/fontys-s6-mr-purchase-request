@@ -8,39 +8,40 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-@Table(name="vehicle")
+@Table(name = "vehicle")
 public class Vehicle {
-    //Vehicle id
+    // Vehicle id
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="vehicle_id")
+    @Column(name = "vehicle_id")
     private Long id;
-    
-    //Vehicle uuid (microservice foreign key)
+
+    // Vehicle uuid (microservice foreign key)
     @Setter(AccessLevel.PROTECTED)
-    @Column(name="vehicle_uuid")
+    @Column(name = "vehicle_uuid")
     private String uuid;
 
-    //Model name
-    @Column(name="model_name")
+    // Model name
+    @Column(name = "model_name")
     private String modelName;
 
-    //Brand name
-    @Column(name="brand_name")
+    // Brand name
+    @Column(name = "brand_name")
     private String brandName;
 
-    //Color
-    @Column(name="color")
+    // Color
+    @Column(name = "color")
     private String color;
 
-    //Image url
-    @Column(name="image_url")
+    // Image url
+    @Column(name = "image_url")
     private String imageUrl;
 
-    public Vehicle(int id, String uuid, String modelName, String brandName, String color, String imageUrl){
+    public Vehicle(Long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
         this.id = id;
         this.uuid = uuid;
         this.modelName = modelName;
