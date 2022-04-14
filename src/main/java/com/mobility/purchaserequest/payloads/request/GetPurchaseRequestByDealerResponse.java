@@ -22,6 +22,6 @@ public class GetPurchaseRequestByDealerResponse {
     private BigInteger deliveryPrice;
 
     @NotBlank
-    private Long purchaseUuid;
+    private String purchaseUuid;
 
 }

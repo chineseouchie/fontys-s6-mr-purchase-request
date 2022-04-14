@@ -48,8 +48,16 @@ public class PurchaseRequestController {
 
         try {
             List<GetPurchaseRequestByDealerResponse> response = new ArrayList<>();
-            System.out.println(company.getId());
-            purchaseRequestCompanyRepository.getAllByCompanyId(company.getId());
+            List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository.getAllByCompanyId(company.getId());
+
+            for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
+                GetPurchaseRequestByDealerResponse prbdr = new GetPurchaseRequestByDealerResponse();
+                prbdr.setPurchaseUuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
+                prbdr.setDeliveryDate(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
+                prbdr.setDeliveryPrice(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
+                prbdr.setUuid(purchaseRequestCompany.getUuid());
+                response.add(prbdr);
+            }
 
             return new ResponseEntity<>(response, httpStatusCode);
         } catch (Exception e) {

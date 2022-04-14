@@ -36,7 +36,7 @@ public class PurchaseRequestCompany {
 	@Nullable
 	private Boolean accepted;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
 	@JoinColumn(name = "purchase_request_id")
 	private PurchaseRequest purchaseRequest;
