@@ -42,8 +42,6 @@ public class PurchaseRequestController {
 
     @GetMapping(value = "/dealer/requests")
     public ResponseEntity<List<GetPurchaseRequestCompanyResponse>> getPurchaseRequests(@RequestHeader ("authorization") String jwt) {
-        System.out.println(jwt);
-        HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
          Company company = companyRepository.findByUuid(jwt);
 
         try {
@@ -61,7 +59,7 @@ public class PurchaseRequestController {
                 response.add(prbdr);
             }
 
-            return new ResponseEntity<>(response, httpStatusCode);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
