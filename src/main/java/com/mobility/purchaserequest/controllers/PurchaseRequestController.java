@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
+import com.mobility.purchaserequest.payloads.request.AcceptPurchaseRequestRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
@@ -103,25 +104,35 @@ public class PurchaseRequestController {
     }
 
     @PostMapping(path = "/accept")
-    public ResponseEntity<Map<String, String>> acceptPurchaseRequest(@RequestBody String purchase_request_uuid,
-            String company_uuid) {
+    public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
+            @RequestBody AcceptPurchaseRequestRequest request) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         Map<String, String> responseBody = new HashMap<String, String>();
 
         try {
-            PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository.findByUuid(purchase_request_uuid);
+            PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository
+                    .findByUuid(request.getPurchaseRequestUuid());
             List<PurchaseRequestCompany> allPurchaseRequestsSentToCompanies = this.purchaseRequestCompanyRepository
                     .findAllByPurchaseRequestUuid(purchaseRequestToAccept.getUuid());
 
-            for (PurchaseRequestCompany purchaseRequestCompany : allPurchaseRequestsSentToCompanies) {
-                purchaseRequestCompany.setAccepted(false);
-                if (purchaseRequestCompany.getCompany().getUuid().equals(company_uuid)) {
-                    purchaseRequestCompany.setAccepted(true);
+            if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
+                if (allPurchaseRequestsSentToCompanies.size() > 0) {
+                    for (PurchaseRequestCompany purchaseRequestCompany : allPurchaseRequestsSentToCompanies) {
+                        purchaseRequestCompany.setAccepted(false);
+                        if (purchaseRequestCompany.getCompany().getUuid().equals(request.getCompanyUuid())) {
+                            purchaseRequestCompany.setAccepted(true);
+                        }
+                    }
+                } else {
+                    httpStatus = HttpStatus.NOT_FOUND;
+                    responseBody.put("message", "invalid company uuid");
                 }
+            } else {
+                httpStatus = HttpStatus.NOT_FOUND;
+                responseBody.put("message", "invalid purchase request uuid");
             }
 
             this.purchaseRequestCompanyRepository.saveAll(allPurchaseRequestsSentToCompanies);
-
             httpStatus = HttpStatus.OK;
             responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
         } catch (Exception e) {
