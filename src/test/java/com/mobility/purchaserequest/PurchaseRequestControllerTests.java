@@ -58,39 +58,27 @@ public class PurchaseRequestControllerTests {
     private JacksonTester<CreatePurchaseRequestRequest> jsonCreatePurchaseRequest;
 
     // Mock data
+    private Vehicle mockVehicle = new Vehicle(Long.valueOf(1), "va2vuw3a-di38-0dss-abc7-9s2d46d8shod", "Astra", "Opel",
+            "Black", "opel_astra_black.png");
+    private Offer mockOffer = new Offer(Long.valueOf(1), "c621c13f-c0c3-7af7-bad1-fb72264dafzx",
+            "c521cd3f-s0d1-aed7-avd1-sbv426rddffg", mockVehicle, 1649404432);
+    private Company mockCompany = new Company(Long.valueOf(1), "8sh28713f-scbs-9dis-0abd-0ahsihuduwhd",
+            "Very real company LLC.");
+    // private PurchaseRequest mockPurchaseRequest = new
+    // PurchaseRequest(Long.valueOf(1), "dhfudsgrurkfugsrykesgu", mockOffer,
+    // mockCompany, 1649404783, new BigInteger("5000.42"));
 
-    /*
-     * private Vehicle mockVehicle = new Vehicle(Long.valueOf(1),
-     * "va2vuw3a-di38-0dss-abc7-9s2d46d8shod", "Astra", "Opel",
-     * "Black", "opel_astra_black.png");
-     * private Offer mockOffer = new Offer(Long.valueOf(1),
-     * "c621c13f-c0c3-7af7-bad1-fb72264dafzx",
-     * "c521cd3f-s0d1-aed7-avd1-sbv426rddffg", mockVehicle, 1649404432);
-     * private Company mockCompany = new Company(Long.valueOf(1),
-     * "8sh28713f-scbs-9dis-0abd-0ahsihuduwhd",
-     * "Very real company LLC.");
-     * private PurchaseRequest mockPurchaseRequest = new
-     * PurchaseRequest(Long.valueOf(1), mockOffer, mockCompany,
-     * 1649404783, new BigInteger("5000.42"));
-     */
-
-    @BeforeEach
-    public void setup() {
-        /*
-         * JacksonTester.initFields(this, new ObjectMapper());
-         * this.mvc = MockMvcBuilders.standaloneSetup(new
-         * PurchaseRequestController(this.purchaseRequestRepository,
-         * this.offerRepository, this.companyRepository)).build();
-         * 
-         * given(this.offerRepository.findByUuid(this.mockOffer.getUuid())).willReturn(
-         * this.mockOffer);
-         * given(this.vehicleRepository.findByUuid(this.mockVehicle.getUuid())).
-         * willReturn(this.mockVehicle);
-         * given(this.purchaseRequestRepository.findByUuid(mockPurchaseRequest.getUuid()
-         * ))
-         * .willReturn(this.mockPurchaseRequest);
-         */
-    }
+    // @BeforeEach
+    // public void setup() {
+    // JacksonTester.initFields(this, new ObjectMapper());
+    // this.mvc = MockMvcBuilders.standaloneSetup(new
+    // PurchaseRequestController(this.purchaseRequestRepository,
+    // this.offerRepository, this.companyRepository)).build();
+    //
+    // given(this.offerRepository.findByUuid(this.mockOffer.getUuid())).willReturn(this.mockOffer);
+    // given(this.vehicleRepository.findByUuid(this.mockVehicle.getUuid())).willReturn(this.mockVehicle);
+    // //given(this.purchaseRequestRepository.findByUuid(mockPurchaseRequest.getUuid())).willReturn(this.mockPurchaseRequest);
+    // }
 
     @Test
     public void canCreatePurchaseRequest() throws Exception {

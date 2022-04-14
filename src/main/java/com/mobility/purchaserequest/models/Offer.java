@@ -12,37 +12,44 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "offer")
 public class Offer {
-    // Id (primary key)
-    @Id
-    @Setter(AccessLevel.PROTECTED)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "offer_id")
-    private Long id;
+	// Id (primary key)
+	@Id
+	@Setter(AccessLevel.PROTECTED)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "offer_id")
+	private Long id;
 
-    // Uuid (Microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name = "offer_uuid")
-    private String uuid;
+	// Uuid (Microservice foreign key)
+	@Setter(AccessLevel.PROTECTED)
+	@Column(name = "offer_uuid")
+	private String uuid;
 
-    // User uuid (Microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name = "user_uuid")
-    private String userUuid;
+	// User uuid (Microservice foreign key)
+	@Setter(AccessLevel.PROTECTED)
+	@Column(name = "user_uuid")
+	private String userUuid;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
-    private Vehicle vehicle;
+	@OneToOne()
+	@JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
+	private Vehicle vehicle;
 
-    // Date (unix timestamp)
-    @Column(name = "date")
-    @Nullable
-    private int date;
+	// Date (unix timestamp)
+	@Column(name = "date")
+	@Nullable
+	private int date;
 
-    public Offer(Long id, String uuid, String userUuid, Vehicle vehicle, int date) {
-        this.id = id;
-        this.uuid = uuid;
-        this.userUuid = userUuid;
-        this.vehicle = vehicle;
-        this.date = date;
-    }
+	public Offer(Long id, String uuid, String userUuid, Vehicle vehicle, int date) {
+		this.id = id;
+		this.uuid = uuid;
+		this.userUuid = userUuid;
+		this.vehicle = vehicle;
+		this.date = date;
+	}
+
+	public Offer(String uuid, String userUuid, Vehicle vehicle, int date) {
+		this.uuid = uuid;
+		this.userUuid = userUuid;
+		this.vehicle = vehicle;
+		this.date = date;
+	}
 }

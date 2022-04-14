@@ -4,49 +4,46 @@ import javax.persistence.*;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "vehicle")
 public class Vehicle {
-    // Vehicle id
-    @Id
-    @Setter(AccessLevel.PROTECTED)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vehicle_id")
-    private Long id;
+	// Vehicle id
+	@Id
+	@Setter(AccessLevel.PROTECTED)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "vehicle_id")
+	private Long id;
 
-    // Vehicle uuid (microservice foreign key)
-    @Setter(AccessLevel.PROTECTED)
-    @Column(name = "vehicle_uuid")
-    private String uuid;
+	// Vehicle uuid (microservice foreign key)
+	@Setter(AccessLevel.PROTECTED)
+	@Column(name = "vehicle_uuid")
+	private String uuid;
 
-    // Model name
-    @Column(name = "model_name")
-    private String modelName;
+	// Model name
+	@Column(name = "model_name")
+	private String modelName;
 
-    // Brand name
-    @Column(name = "brand_name")
-    private String brandName;
+	// Brand name
+	@Column(name = "brand_name")
+	private String brandName;
 
-    // Color
-    @Column(name = "color")
-    private String color;
+	// Color
+	@Column(name = "color")
+	private String color;
 
-    // Image url
-    @Column(name = "image_url")
-    private String imageUrl;
+	// Image url
+	@Column(name = "image_url")
+	private String imageUrl;
 
-    public Vehicle(Long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
-        this.id = id;
-        this.uuid = uuid;
-        this.modelName = modelName;
-        this.brandName = brandName;
-        this.color = color;
-        this.imageUrl = imageUrl;
-    }
+	public Vehicle(long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
+		this.id = id;
+		this.uuid = uuid;
+		this.modelName = modelName;
+		this.brandName = brandName;
+		this.color = color;
+		this.imageUrl = imageUrl;
+	}
 }

@@ -1,11 +1,12 @@
 package com.mobility.purchaserequest.models;
 
 import java.math.BigInteger;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.*;
 
-import org.springframework.lang.Nullable;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import lombok.*;
 
@@ -27,13 +28,13 @@ public class PurchaseRequest {
     @Column(name = "purchase_request_uuid")
     private String uuid;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
     private Offer offer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
-    private Company company;
+    @OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Fetch(value = FetchMode.SELECT)
+    private List<PurchaseRequestCompany> purchaseRequestCompanies = new ArrayList<>();
 
     // Delivery date (Unix timestamp)
     @Column(name = "delivery_date")
@@ -43,25 +44,16 @@ public class PurchaseRequest {
     @Column(name = "delivery_price")
     private BigInteger deliveryPrice;
 
-    // Accepted
-    @Column(name = "accepted")
-    @Nullable
-    private Boolean accepted;
-
-    public PurchaseRequest(Offer offer, Company company, Integer deliveryDate, BigInteger deliveryPrice) {
+    public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
         this.uuid = UUID.randomUUID().toString();
         this.offer = offer;
-        this.company = company;
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
     }
 
-    public PurchaseRequest(Long id, String uuid, Offer offer, Company company, Integer deliveryDate,
-            BigInteger deliveryPrice) {
-        this.id = id;
+    public PurchaseRequest(String uuid, Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
         this.uuid = uuid;
         this.offer = offer;
-        this.company = company;
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
     }
