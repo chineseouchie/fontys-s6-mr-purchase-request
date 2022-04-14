@@ -43,6 +43,7 @@ public class PurchaseRequestController {
         this.purchaseRequestCompanyRepository = purchaseRequestCompanyRepository;
     }
 
+    // Create a new purchase request
     @PostMapping(path = "/create")
     public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -50,8 +51,11 @@ public class PurchaseRequestController {
         responseBody.put("message", "Internal server error.");
 
         try {
+            // Fetch the offer. And check if it's valid.
             Offer offer = this.offerRepository.findByUuid(request.getOfferUuid());
             if (offer != null && offer.getUuid().equals(request.getOfferUuid())) {
+
+                // Fetch all the companies the request will be created for.
                 List<Company> companies = new ArrayList<Company>();
                 for (String companyUuid : request.getCompanyUuids()) {
                     Company company = this.companyRepository.findByUuid(companyUuid);
@@ -61,17 +65,22 @@ public class PurchaseRequestController {
                 }
 
                 if (companies != null && companies.size() != 0) {
-                    List<PurchaseRequest> purchaseRequestsToSave = new ArrayList<PurchaseRequest>();
-                    for (Company company : companies) {
-                        purchaseRequestsToSave.add(
-                                new PurchaseRequest(
-                                        offer,
-                                        company,
-                                        request.getDeliveryDate(),
-                                        request.getDeliveryPrice()));
-                    }
+                    // Create the purchase request
+                    PurchaseRequest purchaseRequest = new PurchaseRequest(
+                            offer,
+                            request.getDeliveryDate(),
+                            request.getDeliveryPrice());
 
-                    this.purchaseRequestRepository.saveAll(purchaseRequestsToSave);
+                    // Create a new entity for each company that receives the purchase request.
+                    List<PurchaseRequestCompany> purchaseRequestsToCompanies = new ArrayList<PurchaseRequestCompany>();
+                    for (Company company : companies) {
+                        PurchaseRequestCompany purchaseRequestCompany = new PurchaseRequestCompany(
+                                company,
+                                null,
+                                purchaseRequest);
+                        purchaseRequestsToCompanies.add(purchaseRequestCompany);
+                    }
+                    this.purchaseRequestCompanyRepository.saveAll(purchaseRequestsToCompanies);
                     httpStatus = HttpStatus.CREATED;
                     responseBody.put("message", "Succesfully created the purchase requests.");
                 } else {
@@ -90,7 +99,8 @@ public class PurchaseRequestController {
     }
 
     @PostMapping(path = "/accept")
-    public ResponseEntity<Map<String, String>> acceptPurchaseRequest(@RequestBody String purchase_request_uuid) {
+    public ResponseEntity<Map<String, String>> acceptPurchaseRequest(@RequestBody String purchase_request_uuid,
+            String company_uuid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         Map<String, String> responseBody = new HashMap<String, String>();
 
@@ -109,16 +119,20 @@ public class PurchaseRequestController {
             responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
 
     @GetMapping(value = "/dealer/requests")
-    public ResponseEntity<List<GetPurchaseRequestByDealerResponse>> getPurchaseRequests(@RequestHeader ("authorization") String jwt) {
+    public ResponseEntity<List<GetPurchaseRequestByDealerResponse>> getPurchaseRequests(
+            @RequestHeader("authorization") String jwt) {
         System.out.println(jwt);
         HttpStatus httpStatusCode = HttpStatus.BAD_REQUEST;
-         Company company = companyRepository.findByUuid(jwt);
+        Company company = companyRepository.findByUuid(jwt);
 
         try {
             List<GetPurchaseRequestByDealerResponse> response = new ArrayList<>();
-            List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository.getAllByCompanyId(company.getId());
+            List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
+                    .getAllByCompanyId(company.getId());
 
             for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
                 GetPurchaseRequestByDealerResponse prbdr = new GetPurchaseRequestByDealerResponse();
@@ -134,28 +148,26 @@ public class PurchaseRequestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-//        try {
-//            List<PurchaseRequestCompany> list = PurchaseRequestRepository.findAll();
-//
-//            if(list != null) {
-//                response = GetVehicleResponse.convertVehicleList(list);
-//
-//                // Sends vehicle to message bus (RabbitMQ)
-//                list.forEach(vehicle -> {
-//                    RabbitMQService.publishCreateVehicle(vehicle);
-//                });
-//
-//                httpStatusCode = HttpStatus.OK
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//
+        // try {
+        // List<PurchaseRequestCompany> list = PurchaseRequestRepository.findAll();
+        //
+        // if(list != null) {
+        // response = GetVehicleResponse.convertVehicleList(list);
+        //
+        // // Sends vehicle to message bus (RabbitMQ)
+        // list.forEach(vehicle -> {
+        // RabbitMQService.publishCreateVehicle(vehicle);
+        // });
+        //
+        // httpStatusCode = HttpStatus.OK
+        // }
+        // } catch (Exception e) {
+        // System.out.println(e);
+        // httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        // }
+        //
 
     }
-
-    <<<<<<<HEAD try
 
     {
         PurchaseRequest purchaseRequestToDecline = this.purchaseRequestRepository.findByUuid(purchase_request_uuid);
@@ -168,7 +180,8 @@ public class PurchaseRequestController {
     Exception e)
     {
         System.out.println(e.getMessage());
-    }=======
+    }
+
     // @PostMapping(path = "/create")
     // public ResponseEntity<Map<String, String>> create(@Valid @RequestBody
     // CreatePurchaseRequestRequest request) {
@@ -192,7 +205,6 @@ public class PurchaseRequestController {
     //
     // return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
     // }
-    >>>>>>>0 c73bea37aa288a81344f969c468b89e194e7dce
 
     // @PostMapping(path = "/accept")
     // public ResponseEntity<Map<String, String>> acceptPurchaseRequest(@RequestBody
