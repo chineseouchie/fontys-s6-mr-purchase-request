@@ -167,20 +167,28 @@ public class PurchaseRequestController {
 		}
 	}
 
-	@GetMapping("/single/{purchase_request_uuid}")
-
+	@GetMapping("/{purchase_request_uuid}")
 	public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value = "purchase_request_uuid") String uuid) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-		PurchaseRequest purchaseRequest = null;
-
+		PurchaseRequest purchaseRequest = new PurchaseRequest();
 		try {
-			purchaseRequest = this.purchaseRequestRepository.findByUuid(uuid);
-			httpStatus = HttpStatus.FOUND;
+			System.out.println(uuid);
+
+			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository.getByUuid(uuid);
+			long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
+			System.out.println(purchaseRequestId);
+
+			purchaseRequest = purchaseRequestRepository.getById(purchaseRequestId);
+			System.out.println(purchaseRequest);
+			httpStatus = HttpStatus.OK;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
+		// return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
+
 		return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
+
 	}
 
 	@GetMapping("/byoffer/{offer_uuid}")

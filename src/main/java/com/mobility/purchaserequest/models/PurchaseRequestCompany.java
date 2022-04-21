@@ -27,7 +27,7 @@ public class PurchaseRequestCompany {
 	@Column(name = "purchase_request_company_uuid")
 	private String uuid;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "company_id", referencedColumnName = "company_id")
 	private Company company;
 
