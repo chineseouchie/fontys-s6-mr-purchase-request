@@ -114,29 +114,18 @@ public class PurchaseRequestController {
 		String companyUuid = jwt;
 
 		try {
-			PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository.findByUuid(uuid);
-			System.out.println(purchaseRequestToAccept);
-			List<PurchaseRequestCompany> allPurchaseRequestsSentToCompanies = this.purchaseRequestCompanyRepository
-					.findAllByPurchaseRequestUuid(purchaseRequestToAccept.getUuid());
+			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
+					uuid, companyUuid);
 
 			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
-				if (allPurchaseRequestsSentToCompanies.size() > 0) {
-					for (PurchaseRequestCompany purchaseRequestCompany : allPurchaseRequestsSentToCompanies) {
-						purchaseRequestCompany.setAccepted(false);
-						if (purchaseRequestCompany.getCompany().getUuid().equals(companyUuid)) {
-							purchaseRequestCompany.setAccepted(true);
-						}
-					}
-				} else {
-					httpStatus = HttpStatus.NOT_FOUND;
-					responseBody.put("message", "invalid company uuid");
-				}
+				purchaseRequestToAccept.setAccepted(true);
+
+				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
 			} else {
 				httpStatus = HttpStatus.NOT_FOUND;
 				responseBody.put("message", "invalid purchase request uuid");
 			}
 
-			this.purchaseRequestCompanyRepository.saveAll(allPurchaseRequestsSentToCompanies);
 			httpStatus = HttpStatus.OK;
 			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
 		} catch (Exception e) {
@@ -151,15 +140,18 @@ public class PurchaseRequestController {
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatusCode;
 		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
-		Company company = companyRepository.findByUuid(jwt);
+		String companyUuid = jwt;
+
+		Company company = companyRepository.findByUuid(companyUuid);
+
 		try {
 			if (company != null) {
 				List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
-						.getAllByCompanyId(company.getId());
-				response = GetPurchaseRequestCompanyResponse.convertPurchaseRequestCompanyList(purchaseRequestCompanies);
+						.getAllByCompanyIdAndAcceptedIsNull(company.getId());
+				response = GetPurchaseRequestCompanyResponse
+						.convertPurchaseRequestCompanyList(purchaseRequestCompanies);
 				httpStatusCode = HttpStatus.OK;
-			}
-			else {
+			} else {
 				httpStatusCode = HttpStatus.NOT_FOUND;
 			}
 		} catch (Exception e) {
