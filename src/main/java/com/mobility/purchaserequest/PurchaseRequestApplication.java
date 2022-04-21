@@ -38,15 +38,15 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Vehicle serie_3 = new Vehicle(1, "vehicle_ABC", "3 Serie", "BMW", "Red",
+		Vehicle serie_3 = new Vehicle(Long.valueOf(1), "ABC", "3 Serie", "BMW", "Red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle s6 = new Vehicle(2, "vehicle_DEF", "S6", "Audi", "Blue",
+		Vehicle s6 = new Vehicle(Long.valueOf(2), "DEF", "S6", "Audi", "Blue",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle vectra = new Vehicle(3, "vehicle_GHI", "Vectra", "Opel", "red",
+		Vehicle vectra = new Vehicle(Long.valueOf(3), "GHI", "Vectra", "Opel", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle model_s = new Vehicle(4, "vehicle_JKL", "Model S", "Tesla", "red",
+		Vehicle model_s = new Vehicle(Long.valueOf(4), "JKL", "Model S", "Tesla", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW", "red",
+		Vehicle m5 = new Vehicle(Long.valueOf(5), "MNO", "M5", "BMW", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
 		vehicleRepository.save(serie_3);
