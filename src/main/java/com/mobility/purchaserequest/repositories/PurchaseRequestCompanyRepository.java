@@ -11,4 +11,8 @@ import java.util.List;
 @Repository
 public interface PurchaseRequestCompanyRepository extends JpaRepository<PurchaseRequestCompany, Long> {
     List<PurchaseRequestCompany> getAllByCompanyId(Long id);
+
+    List<PurchaseRequestCompany> findAllByCompanyUuid(String companyUuid);
+
+    List<PurchaseRequestCompany> findAllByPurchaseRequestUuid(String purchaseRequestUuid);
 }
