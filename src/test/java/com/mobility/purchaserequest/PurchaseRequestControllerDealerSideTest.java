@@ -1,56 +1,58 @@
 package com.mobility.purchaserequest;
 
+import com.mobility.purchaserequest.controllers.PurchaseRequestController;
 import com.mobility.purchaserequest.models.*;
-import com.mobility.purchaserequest.repositories.CompanyRepository;
-import com.mobility.purchaserequest.repositories.OfferRepository;
-import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
-import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
-import com.mobility.purchaserequest.repositories.VehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.repositories.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigInteger;
+import java.util.List;
 
-@SpringBootApplication
-public class PurchaseRequestApplication implements CommandLineRunner {
+import static org.aspectj.runtime.internal.Conversions.longValue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
-	@Autowired
-	private VehicleRepository vehicleRepository;
+@SpringBootTest
+public class PurchaseRequestControllerDealerSideTest {
 
-	@Autowired
-	private CompanyRepository companyRepository;
-
-	@Autowired
-	private OfferRepository offerRepository;
-
-	@Autowired
+	@Mock
 	private PurchaseRequestRepository purchaseRequestRepository;
 
-	@Autowired
+	@Mock
 	private PurchaseRequestCompanyRepository purchaseRequestCompanyRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(PurchaseRequestApplication.class, args);
-		System.out.println("Purchase request service ready");
-	}
+	@Mock
+	private VehicleRepository vehicleRepository;
 
-	@Override
-	public void run(String... args) throws Exception {
+	@Mock
+	private OfferRepository offerRepository;
 
-		Vehicle serie_3 = new Vehicle(Long.valueOf(1), "ABC", "3 Serie", "BMW", "Red",
+	@Mock
+	private CompanyRepository companyRepository;
+
+	@InjectMocks
+	private PurchaseRequestController purchaseRequestController;
+
+	private List<PurchaseRequestCompany> mockPurchaseRequestCompanies;
+
+	@BeforeEach
+	private void init() {
+
+		Vehicle s6 = new Vehicle(2, "vehicle_DEF", "S6", "Audi", "Blue",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle s6 = new Vehicle(Long.valueOf(2), "DEF", "S6", "Audi", "Blue",
+		Vehicle vectra = new Vehicle(3, "vehicle_GHI", "Vectra", "Opel", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle vectra = new Vehicle(Long.valueOf(3), "GHI", "Vectra", "Opel", "red",
+		Vehicle model_s = new Vehicle(4, "vehicle_JKL", "Model S", "Tesla", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle model_s = new Vehicle(Long.valueOf(4), "JKL", "Model S", "Tesla", "red",
-				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-		Vehicle m5 = new Vehicle(Long.valueOf(5), "MNO", "M5", "BMW", "red",
+		Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
-		vehicleRepository.save(serie_3);
 		vehicleRepository.save(s6);
 		vehicleRepository.save(vectra);
 		vehicleRepository.save(model_s);
@@ -101,7 +103,37 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		purchaseRequestCompanyRepository.save(ppr5);
 		purchaseRequestCompanyRepository.save(ppr6);
 		purchaseRequestCompanyRepository.save(ppr7);
-
 	}
+	// @Test
+	// void getAllPurchaseRequestsForCompanyTest(int id) {
+	// id = 1;
+	// given(purchaseRequestCompanyRepository.getAllByCompanyId(longValue(id))).willReturn(mockPurchaseRequestCompanies);
+
+	// ResponseEntity<List<GetPurchaseRequestCompanyResponse>>
+	// purchaseRequestCompanyResponse =
+	// purchaseRequestController.getPurchaseRequests("company_ABC");
+
+	// List<PurchaseRequestCompany> purchaseRequestCompanies =
+	// purchaseRequestCompanyRepository.getAllByCompanyId(longValue(id));
+
+	// for (PurchaseRequestCompany purchaseRequestCompany :
+	// purchaseRequestCompanies) {
+	// GetPurchaseRequestCompanyResponse prbdr = new
+	// GetPurchaseRequestCompanyResponse();
+	// prbdr.setPurchase_request_uuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
+	// prbdr.setDelivery_date(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
+	// prbdr.setDelivery_price(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
+	// prbdr.setUuid(purchaseRequestCompany.getUuid());
+	// prbdr.setBrand_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getBrandName());
+	// prbdr.setModel_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getModelName());
+	// response.add(prbdr);
+	// }
+
+	// assertNotNull(vehiclesResponse);
+	// assertTrue(vehiclesResponse.hasBody());
+
+	// assertTrue(vehiclesResponse.getBody().size() == mockVehicles.size());
+	// assertTrue(vehiclesResponse.getBody().containsAll(GetVehicleResponse.convertVehicleList(mockVehicles)));
+	// }
 
 }

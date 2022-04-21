@@ -2,7 +2,9 @@ package com.mobility.purchaserequest.repositories;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -11,4 +13,8 @@ public interface PurchaseRequestCompanyRepository extends JpaRepository<Purchase
 	List<PurchaseRequestCompany> getAllByCompanyId(Long id);
 
 	PurchaseRequestCompany getByUuid(String uuid);
+
+	List<PurchaseRequestCompany> findAllByCompanyUuid(String companyUuid);
+
+	List<PurchaseRequestCompany> findAllByPurchaseRequestUuid(String purchaseRequestUuid);
 }
