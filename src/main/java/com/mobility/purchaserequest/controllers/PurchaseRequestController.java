@@ -170,19 +170,29 @@ public class PurchaseRequestController {
 
 	@GetMapping("/{purchase_request_uuid}")
 	public ResponseEntity<PurchaseRequestResponse> getSingle(
-			@PathVariable(value = "purchase_request_uuid") String uuid) {
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
+		System.out.println(jwt);
 		try {
-			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository.getByUuid(uuid);
-			long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
+			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
+					.getByUuidAndCompanyUuid(uuid, jwt);
 
-			PurchaseRequest purchaseRequest = new PurchaseRequest();
-			purchaseRequest = purchaseRequestRepository.getById(purchaseRequestId);
+			if (purchaseRequestCompany == null) {
 
-			purchaseRequestResponse = new PurchaseRequestResponse(purchaseRequest);
+				httpStatus = HttpStatus.NOT_FOUND;
+			} else {
+				long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
 
-			httpStatus = HttpStatus.OK;
+				PurchaseRequest purchaseRequest = new PurchaseRequest();
+				purchaseRequest = purchaseRequestRepository.getById(purchaseRequestId);
+
+				purchaseRequestResponse = new PurchaseRequestResponse(purchaseRequest);
+
+				httpStatus = HttpStatus.OK;
+
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
