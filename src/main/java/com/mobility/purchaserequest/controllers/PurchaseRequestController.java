@@ -2,6 +2,7 @@ package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -168,26 +169,25 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping("/{purchase_request_uuid}")
-	public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value = "purchase_request_uuid") String uuid) {
+	public ResponseEntity<PurchaseRequestResponse> getSingle(
+			@PathVariable(value = "purchase_request_uuid") String uuid) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-		PurchaseRequest purchaseRequest = new PurchaseRequest();
+		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
 		try {
-			System.out.println(uuid);
-
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository.getByUuid(uuid);
 			long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
-			System.out.println(purchaseRequestId);
 
+			PurchaseRequest purchaseRequest = new PurchaseRequest();
 			purchaseRequest = purchaseRequestRepository.getById(purchaseRequestId);
-			System.out.println(purchaseRequest);
+
+			purchaseRequestResponse = new PurchaseRequestResponse(purchaseRequest);
+
 			httpStatus = HttpStatus.OK;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		// return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
-
-		return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
+		return new ResponseEntity<PurchaseRequestResponse>(purchaseRequestResponse, httpStatus);
 
 	}
 
