@@ -149,26 +149,23 @@ public class PurchaseRequestController {
 	@GetMapping(value = "/dealer/requests")
 	public ResponseEntity<List<GetPurchaseRequestCompanyResponse>> getPurchaseRequests(
 			@RequestHeader("authorization") String jwt) {
+		HttpStatus httpStatusCode;
+		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
 		Company company = companyRepository.findByUuid(jwt);
 		try {
-			List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
-			List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
-					.getAllByCompanyId(company.getId());
-			for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
-				GetPurchaseRequestCompanyResponse prbdr = new GetPurchaseRequestCompanyResponse();
-				prbdr.setPurchase_request_uuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
-				prbdr.setDelivery_date(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
-				prbdr.setDelivery_price(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
-				prbdr.setUuid(purchaseRequestCompany.getUuid());
-				prbdr.setBrand_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getBrandName());
-				prbdr.setModel_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getModelName());
-				response.add(prbdr);
+			if (company != null) {
+				List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
+						.getAllByCompanyId(company.getId());
+				response = GetPurchaseRequestCompanyResponse.convertPurchaseRequestCompanyList(purchaseRequestCompanies);
+				httpStatusCode = HttpStatus.OK;
 			}
-
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			else {
+				httpStatusCode = HttpStatus.NOT_FOUND;
+			}
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
+		return new ResponseEntity<>(response, httpStatusCode);
 	}
 
 	@GetMapping("/{purchase_request_uuid}")
