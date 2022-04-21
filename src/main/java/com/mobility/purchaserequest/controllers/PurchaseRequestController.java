@@ -104,15 +104,18 @@ public class PurchaseRequestController {
 		return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
 	}
 
-	@PostMapping(path = "/accept")
+	@PostMapping("/{purchase_request_uuid}/accept")
 	public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
-			@RequestBody AcceptPurchaseRequestRequest request) {
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
+		String companyUuid = jwt;
+
 		try {
-			PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository
-					.findByUuid(request.getPurchaseRequestUuid());
+			PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository.findByUuid(uuid);
+			System.out.println(purchaseRequestToAccept);
 			List<PurchaseRequestCompany> allPurchaseRequestsSentToCompanies = this.purchaseRequestCompanyRepository
 					.findAllByPurchaseRequestUuid(purchaseRequestToAccept.getUuid());
 
@@ -120,7 +123,7 @@ public class PurchaseRequestController {
 				if (allPurchaseRequestsSentToCompanies.size() > 0) {
 					for (PurchaseRequestCompany purchaseRequestCompany : allPurchaseRequestsSentToCompanies) {
 						purchaseRequestCompany.setAccepted(false);
-						if (purchaseRequestCompany.getCompany().getUuid().equals(request.getCompanyUuid())) {
+						if (purchaseRequestCompany.getCompany().getUuid().equals(companyUuid)) {
 							purchaseRequestCompany.setAccepted(true);
 						}
 					}
@@ -174,10 +177,11 @@ public class PurchaseRequestController {
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
-		System.out.println(jwt);
+
+		String companyUuid = jwt;
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
-					.getByUuidAndCompanyUuid(uuid, jwt);
+					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
 
 			if (purchaseRequestCompany == null) {
 

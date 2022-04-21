@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest, Long> {
-    PurchaseRequest findByUuid(String purchase_request_uuid);
-    List<PurchaseRequest> findListByOffer(Offer offer);
+	PurchaseRequest findByUuid(String purchase_request_uuid);
+
+	List<PurchaseRequest> findListByOffer(Offer offer);
 }

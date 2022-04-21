@@ -10,9 +10,13 @@ import java.util.List;
 public interface PurchaseRequestCompanyRepository extends JpaRepository<PurchaseRequestCompany, Long> {
 	List<PurchaseRequestCompany> getAllByCompanyId(Long id);
 
+	List<PurchaseRequestCompany> getAllByCompanyIdAndAcceptedIsNull(Long id);
+
 	PurchaseRequestCompany getByUuid(String uuid);
 
 	PurchaseRequestCompany getByUuidAndCompanyUuid(String uuid, String companyUuid);
+
+	PurchaseRequestCompany getByUuidAndCompanyUuidAndAcceptedIsNull(String uuid, String companyUuid);
 
 	List<PurchaseRequestCompany> findAllByCompanyUuid(String companyUuid);
 
