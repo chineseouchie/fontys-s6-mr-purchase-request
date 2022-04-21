@@ -1,7 +1,7 @@
 package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
-import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestByDealerResponse;
+import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -155,15 +155,17 @@ public class PurchaseRequestController {
                     .getAllByCompanyId(company.getId());
 
             for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
-                GetPurchaseRequestByDealerResponse prbdr = new GetPurchaseRequestByDealerResponse();
-                prbdr.setPurchaseUuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
-                prbdr.setDeliveryDate(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
-                prbdr.setDeliveryPrice(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
+                GetPurchaseRequestCompanyResponse prbdr = new GetPurchaseRequestCompanyResponse();
+                prbdr.setPurchase_request_uuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
+                prbdr.setDelivery_date(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
+                prbdr.setDelivery_price(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
                 prbdr.setUuid(purchaseRequestCompany.getUuid());
+                prbdr.setBrand_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getBrandName());
+                prbdr.setModel_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getModelName());
                 response.add(prbdr);
             }
 
-            return new ResponseEntity<>(response, httpStatusCode);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
