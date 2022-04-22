@@ -24,17 +24,13 @@ public class PurchaseRequest implements Serializable {
 	private Long id;
 
 	// Purchase request uuid (Microservice foreign key)
-	@Setter(AccessLevel.PROTECTED)
+	//@Setter(AccessLevel.PROTECTED)
 	@Column(name = "purchase_request_uuid")
 	private String uuid;
 
 	@OneToOne()
 	@JoinColumn(name = "offer_id", referencedColumnName = "offer_id")
 	private Offer offer;
-
-	@OneToMany(mappedBy = "purchaseRequest", fetch = FetchType.LAZY, orphanRemoval = true)
-	@Fetch(value = FetchMode.SELECT)
-	private List<PurchaseRequestCompany> purchaseRequestCompanies = new ArrayList<>();
 
 	// Delivery date (Unix timestamp)
 	@Column(name = "delivery_date")

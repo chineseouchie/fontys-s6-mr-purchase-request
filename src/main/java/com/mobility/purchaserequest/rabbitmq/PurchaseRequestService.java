@@ -43,10 +43,9 @@ public class PurchaseRequestService {
 
 	public static void publishAcceptedPurchaseRequest(PurchaseRequestCompany pr) throws IOException {
 		channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
-		String json = gson.toJson(pr);
-		channel.basicPublish(EXCHANGE_NAME, "purchaserequest.accepted", null, json.getBytes(StandardCharsets.UTF_8));
+		String json = new Gson().toJson(pr);
+		channel.basicPublish(EXCHANGE_NAME, "purchase_request.accepted", null, json.getBytes(StandardCharsets.UTF_8));
 		System.out.println("PR sent to other MS");
 	}
 

@@ -1,5 +1,6 @@
 package com.mobility.purchaserequest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class PurchaseRequestCompany implements Serializable {
 	@Nullable
 	private Boolean accepted;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "purchase_request_id")
 	private PurchaseRequest purchaseRequest;
 
