@@ -1,6 +1,7 @@
 package com.mobility.purchaserequest.rabbitmq;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
@@ -42,7 +43,9 @@ public class PurchaseRequestService {
 
 	public static void publishAcceptedPurchaseRequest(PurchaseRequestCompany pr) throws IOException {
 		channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-		String json = new Gson().toJson(pr);
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
+		String json = gson.toJson(pr);
 		channel.basicPublish(EXCHANGE_NAME, "purchaserequest.accepted", null, json.getBytes(StandardCharsets.UTF_8));
 		System.out.println("PR sent to other MS");
 	}
