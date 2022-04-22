@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
-import com.mobility.purchaserequest.payloads.request.AcceptPurchaseRequestRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
@@ -117,8 +116,50 @@ public class PurchaseRequestController {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
 					uuid, companyUuid);
 
+			if (purchaseRequestToAccept.getAccepted() != null) {
+				httpStatus = HttpStatus.NOT_FOUND;
+				return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+			}
+
 			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
 				purchaseRequestToAccept.setAccepted(true);
+
+				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
+			} else {
+				httpStatus = HttpStatus.NOT_FOUND;
+				responseBody.put("message", "invalid purchase request uuid");
+			}
+
+			httpStatus = HttpStatus.OK;
+			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+	}
+
+	@PostMapping("/{purchase_request_uuid}/decline")
+	public ResponseEntity<Map<String, String>> declinePurchaseRequest(
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		Map<String, String> responseBody = new HashMap<String, String>();
+
+		String companyUuid = jwt;
+
+		try {
+			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
+					uuid, companyUuid);
+
+			// Stop if accepted is not NULL
+			if (purchaseRequestToAccept.getAccepted() != null) {
+				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+				return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+			}
+
+			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
+				purchaseRequestToAccept.setAccepted(false);
 
 				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
 			} else {
