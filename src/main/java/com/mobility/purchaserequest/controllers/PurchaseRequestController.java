@@ -3,6 +3,7 @@ package com.mobility.purchaserequest.controllers;
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
 import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
+import com.mobility.purchaserequest.rabbitmq.PurchaseRequestService;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -125,10 +126,12 @@ public class PurchaseRequestController {
 				purchaseRequestToAccept.setAccepted(true);
 
 				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
+
 			} else {
 				httpStatus = HttpStatus.NOT_FOUND;
 				responseBody.put("message", "invalid purchase request uuid");
 			}
+			PurchaseRequestService.publishAcceptedPurchaseRequest(purchaseRequestToAccept);
 
 			httpStatus = HttpStatus.OK;
 			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());

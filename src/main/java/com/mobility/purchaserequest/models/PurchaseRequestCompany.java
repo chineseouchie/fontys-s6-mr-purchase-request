@@ -1,6 +1,5 @@
 package com.mobility.purchaserequest.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +7,8 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Table(name = "purchase_request_company")
-public class PurchaseRequestCompany {
+public class PurchaseRequestCompany implements Serializable {
 	@Id
 	@Setter(AccessLevel.PROTECTED)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +38,6 @@ public class PurchaseRequestCompany {
 	private Boolean accepted;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonIgnore
 	@JoinColumn(name = "purchase_request_id")
 	private PurchaseRequest purchaseRequest;
 

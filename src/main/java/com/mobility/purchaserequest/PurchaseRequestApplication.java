@@ -1,6 +1,7 @@
 package com.mobility.purchaserequest;
 
 import com.mobility.purchaserequest.models.*;
+import com.mobility.purchaserequest.rabbitmq.PurchaseRequestService;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
