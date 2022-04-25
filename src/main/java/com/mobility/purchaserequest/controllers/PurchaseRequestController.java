@@ -47,7 +47,8 @@ public class PurchaseRequestController {
 
 	// Create a new purchase request
 	@PostMapping(path = "/create")
-	public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
+	public ResponseEntity<Map<String, String>> create(@RequestBody CreatePurchaseRequestRequest request) {
+
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 		responseBody.put("message", "Internal server error.");

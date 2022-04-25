@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +22,10 @@ public class GetPurchaseRequestCompanyResponse {
     private String uuid;
 
     @NotBlank
- 	private Integer delivery_date;
+    private Integer delivery_date;
 
     @NotBlank
-    private BigInteger delivery_price;
+    private BigDecimal delivery_price;
 
     @NotBlank
     private String purchase_request_uuid;

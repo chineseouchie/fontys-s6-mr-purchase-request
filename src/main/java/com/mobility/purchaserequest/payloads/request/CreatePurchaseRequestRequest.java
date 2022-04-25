@@ -1,5 +1,6 @@
 package com.mobility.purchaserequest.payloads.request;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CreatePurchaseRequestRequest {
     @NotEmpty
     private List<String> companyUuids;
     @NotNull
-    private BigInteger deliveryPrice;
+    private BigDecimal deliveryPrice;
     @NotNull
     private Integer deliveryDate;
 }
