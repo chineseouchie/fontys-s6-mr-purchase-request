@@ -1,6 +1,9 @@
 package com.mobility.purchaserequest;
 
 import com.mobility.purchaserequest.models.*;
+
+import com.mobility.purchaserequest.rabbitmq.OfferReceiveService;
+
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
@@ -11,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 @SpringBootApplication
@@ -31,14 +35,15 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 	@Autowired
 	private PurchaseRequestCompanyRepository purchaseRequestCompanyRepository;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		SpringApplication.run(PurchaseRequestApplication.class, args);
+		OfferReceiveService.startReceiving();
+		System.out.println("Purchase Request service ready.");
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-
-		Vehicle serie_3 = new Vehicle(Long.valueOf(1), "ABC", "3 Serie", "BMW", "Red",
+		Vehicle serie_3 = new Vehicle(1, "vehicle_ABC", "3 Serie", "BMW", "Red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 		Vehicle s6 = new Vehicle(Long.valueOf(2), "DEF", "S6", "Audi", "Blue",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");

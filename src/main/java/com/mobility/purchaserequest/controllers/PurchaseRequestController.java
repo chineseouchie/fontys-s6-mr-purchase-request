@@ -2,6 +2,8 @@ package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
+import com.mobility.purchaserequest.rabbitmq.PurchaseRequestSendService;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +17,6 @@ import javax.validation.Valid;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
-import com.mobility.purchaserequest.payloads.request.AcceptPurchaseRequestRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
@@ -103,36 +104,72 @@ public class PurchaseRequestController {
 		return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
 	}
 
-	@PostMapping(path = "/accept")
+	@PostMapping("/{purchase_request_uuid}/accept")
 	public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
-			@RequestBody AcceptPurchaseRequestRequest request) {
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
+		String companyUuid = jwt;
+
 		try {
-			PurchaseRequest purchaseRequestToAccept = this.purchaseRequestRepository
-					.findByUuid(request.getPurchaseRequestUuid());
-			List<PurchaseRequestCompany> allPurchaseRequestsSentToCompanies = this.purchaseRequestCompanyRepository
-					.findAllByPurchaseRequestUuid(purchaseRequestToAccept.getUuid());
+			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
+					uuid, companyUuid);
+
+			if (purchaseRequestToAccept.getAccepted() != null) {
+				httpStatus = HttpStatus.NOT_FOUND;
+				return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+			}
 
 			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
-				if (allPurchaseRequestsSentToCompanies.size() > 0) {
-					for (PurchaseRequestCompany purchaseRequestCompany : allPurchaseRequestsSentToCompanies) {
-						purchaseRequestCompany.setAccepted(false);
-						if (purchaseRequestCompany.getCompany().getUuid().equals(request.getCompanyUuid())) {
-							purchaseRequestCompany.setAccepted(true);
-						}
-					}
-				} else {
-					httpStatus = HttpStatus.NOT_FOUND;
-					responseBody.put("message", "invalid company uuid");
-				}
+				purchaseRequestToAccept.setAccepted(true);
+
+				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
+
+			} else {
+				httpStatus = HttpStatus.NOT_FOUND;
+				responseBody.put("message", "invalid purchase request uuid");
+			}
+			PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestToAccept);
+
+			httpStatus = HttpStatus.OK;
+			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+	}
+
+	@PostMapping("/{purchase_request_uuid}/decline")
+	public ResponseEntity<Map<String, String>> declinePurchaseRequest(
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		Map<String, String> responseBody = new HashMap<String, String>();
+
+		String companyUuid = jwt;
+
+		try {
+			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
+					uuid, companyUuid);
+
+			// Stop if accepted is not NULL
+			if (purchaseRequestToAccept.getAccepted() != null) {
+				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+				return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
+			}
+
+			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
+				purchaseRequestToAccept.setAccepted(false);
+
+				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
 			} else {
 				httpStatus = HttpStatus.NOT_FOUND;
 				responseBody.put("message", "invalid purchase request uuid");
 			}
 
-			this.purchaseRequestCompanyRepository.saveAll(allPurchaseRequestsSentToCompanies);
 			httpStatus = HttpStatus.OK;
 			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
 		} catch (Exception e) {
@@ -145,42 +182,60 @@ public class PurchaseRequestController {
 	@GetMapping(value = "/dealer/requests")
 	public ResponseEntity<List<GetPurchaseRequestCompanyResponse>> getPurchaseRequests(
 			@RequestHeader("authorization") String jwt) {
-		Company company = companyRepository.findByUuid(jwt);
-		try {
-			List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
-			List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
-					.getAllByCompanyId(company.getId());
-			for (PurchaseRequestCompany purchaseRequestCompany : purchaseRequestCompanies) {
-				GetPurchaseRequestCompanyResponse prbdr = new GetPurchaseRequestCompanyResponse();
-				prbdr.setPurchase_request_uuid(purchaseRequestCompany.getPurchaseRequest().getUuid());
-				prbdr.setDelivery_date(purchaseRequestCompany.getPurchaseRequest().getDeliveryDate());
-				prbdr.setDelivery_price(purchaseRequestCompany.getPurchaseRequest().getDeliveryPrice());
-				prbdr.setUuid(purchaseRequestCompany.getUuid());
-				prbdr.setBrand_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getBrandName());
-				prbdr.setModel_name(purchaseRequestCompany.getPurchaseRequest().getOffer().getVehicle().getModelName());
-				response.add(prbdr);
-			}
+		HttpStatus httpStatusCode;
+		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
+		String companyUuid = jwt;
 
-			return new ResponseEntity<>(response, HttpStatus.OK);
+		Company company = companyRepository.findByUuid(companyUuid);
+
+		try {
+			if (company != null) {
+				List<PurchaseRequestCompany> purchaseRequestCompanies = purchaseRequestCompanyRepository
+						.getAllByCompanyIdAndAcceptedIsNull(company.getId());
+				response = GetPurchaseRequestCompanyResponse
+						.convertPurchaseRequestCompanyList(purchaseRequestCompanies);
+				httpStatusCode = HttpStatus.OK;
+			} else {
+				httpStatusCode = HttpStatus.NOT_FOUND;
+			}
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
+		return new ResponseEntity<>(response, httpStatusCode);
 	}
 
-	@GetMapping("/single/{purchase_request_uuid}")
-
-	public ResponseEntity<PurchaseRequest> getSingle(@PathVariable(value = "purchase_request_uuid") String uuid) {
+	@GetMapping("/{purchase_request_uuid}")
+	public ResponseEntity<PurchaseRequestResponse> getSingle(
+			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-		PurchaseRequest purchaseRequest = null;
+		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
 
+		String companyUuid = jwt;
 		try {
-			purchaseRequest = this.purchaseRequestRepository.findByUuid(uuid);
-			httpStatus = HttpStatus.FOUND;
+			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
+					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
+
+			if (purchaseRequestCompany == null) {
+
+				httpStatus = HttpStatus.NOT_FOUND;
+			} else {
+				long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
+
+				PurchaseRequest purchaseRequest = new PurchaseRequest();
+				purchaseRequest = purchaseRequestRepository.getById(purchaseRequestId);
+
+				purchaseRequestResponse = new PurchaseRequestResponse(purchaseRequest);
+
+				httpStatus = HttpStatus.OK;
+
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		return new ResponseEntity<PurchaseRequest>(purchaseRequest, httpStatus);
+		return new ResponseEntity<PurchaseRequestResponse>(purchaseRequestResponse, httpStatus);
+
 	}
 
 	@GetMapping("/byoffer/{offer_uuid}")

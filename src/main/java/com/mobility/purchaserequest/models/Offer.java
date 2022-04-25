@@ -2,16 +2,18 @@ package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
 
+import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
 import lombok.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "offer")
-public class Offer {
+public class Offer implements Serializable {
 	// Id (primary key)
 	@Id
 	@Setter(AccessLevel.PROTECTED)
@@ -51,5 +53,12 @@ public class Offer {
 		this.userUuid = userUuid;
 		this.vehicle = vehicle;
 		this.date = date;
+	}
+
+	public Offer(JSONObject jsonObject, Vehicle vehicle) {
+		this.uuid = jsonObject.getString("offerUuid");
+		this.userUuid = jsonObject.getJSONObject("customer").getString("uuid");
+		this.vehicle = vehicle;
+		this.date = jsonObject.getInt("creation_date");
 	}
 }

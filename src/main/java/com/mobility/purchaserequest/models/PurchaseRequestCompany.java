@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Table(name = "purchase_request_company")
-public class PurchaseRequestCompany {
+public class PurchaseRequestCompany implements Serializable {
 	@Id
 	@Setter(AccessLevel.PROTECTED)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class PurchaseRequestCompany {
 	@Column(name = "purchase_request_company_uuid")
 	private String uuid;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "company_id", referencedColumnName = "company_id")
 	private Company company;
 
@@ -36,8 +38,7 @@ public class PurchaseRequestCompany {
 	@Nullable
 	private Boolean accepted;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonIgnore
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "purchase_request_id")
 	private PurchaseRequest purchaseRequest;
 
