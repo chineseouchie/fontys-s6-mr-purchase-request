@@ -3,6 +3,7 @@ package com.mobility.purchaserequest.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import lombok.*;
+import org.json.JSONObject;
 
 @Entity
 @Getter
@@ -45,5 +46,13 @@ public class Vehicle implements Serializable {
 		this.brandName = brandName;
 		this.color = color;
 		this.imageUrl = imageUrl;
+	}
+
+	public Vehicle(JSONObject jsonObject) {
+		this.id = jsonObject.getJSONObject("vehicle").getLong("vehicle_id");
+		this.uuid = jsonObject.getJSONObject("vehicle").getString("uuid");
+		this.modelName = jsonObject.getJSONObject("vehicle").getString("model");
+		this.brandName = "Fix Brandname Plox";
+		this.color = jsonObject.getString("color");
 	}
 }

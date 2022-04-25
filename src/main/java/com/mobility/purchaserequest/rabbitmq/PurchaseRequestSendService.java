@@ -1,7 +1,6 @@
 package com.mobility.purchaserequest.rabbitmq;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class PurchaseRequestService {
+public class PurchaseRequestSendService {
 	private static final Dotenv env = Dotenv.load();
 
 	private static final String EXCHANGE_NAME = "purchase_request_exchange";
