@@ -15,7 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class PurchaseRequestApplication implements CommandLineRunner {
@@ -80,10 +80,10 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		offerRepository.save(offerGHI);
 		offerRepository.save(offerJKL);
 
-		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigInteger.valueOf(126690));
-		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689, BigInteger.valueOf(126690));
-		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689, BigInteger.valueOf(126690));
+		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigDecimal.valueOf(126690.00));
+		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigDecimal.valueOf(126690.00));
+		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689, BigDecimal.valueOf(126690.00));
+		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689, BigDecimal.valueOf(126690.00));
 
 		purchaseRequestRepository.save(prABC);
 		purchaseRequestRepository.save(prDEF);
@@ -105,6 +105,5 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 		purchaseRequestCompanyRepository.save(ppr5);
 		purchaseRequestCompanyRepository.save(ppr6);
 		purchaseRequestCompanyRepository.save(ppr7);
-
 	}
 }

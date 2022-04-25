@@ -1,5 +1,6 @@
 package com.mobility.purchaserequest.models;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class PurchaseRequest implements Serializable {
 	private Long id;
 
 	// Purchase request uuid (Microservice foreign key)
-	//@Setter(AccessLevel.PROTECTED)
+	// @Setter(AccessLevel.PROTECTED)
 	@Column(name = "purchase_request_uuid")
 	private String uuid;
 
@@ -38,16 +39,16 @@ public class PurchaseRequest implements Serializable {
 
 	// Delivery price
 	@Column(name = "delivery_price")
-	private BigInteger deliveryPrice;
+	private BigDecimal deliveryPrice;
 
-	public PurchaseRequest(Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
+	public PurchaseRequest(Offer offer, Integer deliveryDate, BigDecimal deliveryPrice) {
 		this.uuid = UUID.randomUUID().toString();
 		this.offer = offer;
 		this.deliveryDate = deliveryDate;
 		this.deliveryPrice = deliveryPrice;
 	}
 
-	public PurchaseRequest(String uuid, Offer offer, Integer deliveryDate, BigInteger deliveryPrice) {
+	public PurchaseRequest(String uuid, Offer offer, Integer deliveryDate, BigDecimal deliveryPrice) {
 		this.uuid = uuid;
 		this.offer = offer;
 		this.deliveryDate = deliveryDate;

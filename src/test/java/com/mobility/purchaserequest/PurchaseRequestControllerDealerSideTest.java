@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +73,7 @@ public class PurchaseRequestControllerDealerSideTest {
 		Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW", "red",
 				"https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
-
-		bmw_dealer = new Company(longValue(1),"company_ABC", "BMW Dealer");
+		bmw_dealer = new Company(longValue(1), "company_ABC", "BMW Dealer");
 		audi_dealer = new Company("company_DEF", "Audi Dealer");
 		opel_dealer = new Company("company_GHI", "Opel Dealer");
 		tesla_dealer = new Company("company_JKL", "Tesla Dealer");
@@ -83,10 +83,10 @@ public class PurchaseRequestControllerDealerSideTest {
 		Offer offerGHI = new Offer("offerGHI", "user_RST", vectra, 1649404689);
 		Offer offerJKL = new Offer("offerJKL", "user_TKJ", model_s, 1649404689);
 
-
-		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigInteger.valueOf(126690));
-		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigInteger.valueOf(126690));
-
+		PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigDecimal.valueOf(126690));
+		PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigDecimal.valueOf(126690));
+		PurchaseRequest prGHI = new PurchaseRequest("prGHI", offerGHI, 1650504689, BigDecimal.valueOf(126690));
+		PurchaseRequest prJKL = new PurchaseRequest("prJKL", offerJKL, 1651409689, BigDecimal.valueOf(126690));
 
 		ppr1 = new PurchaseRequestCompany("pprABC", bmw_dealer, prABC);
 		PurchaseRequestCompany ppr2 = new PurchaseRequestCompany("pprDEF", audi_dealer, prABC);
@@ -110,31 +110,34 @@ public class PurchaseRequestControllerDealerSideTest {
 		mockPurchaseRequestCompaniesBMW.add(ppr5);
 	}
 
-	 @Test
-	 void getAllPurchaseRequestsForCompanyTest() {
+	@Test
+	void getAllPurchaseRequestsForCompanyTest() {
 		given(companyRepository.findByUuid(bmw_dealer.getUuid())).willReturn(bmw_dealer);
-		given(purchaseRequestCompanyRepository.getAllByCompanyId(bmw_dealer.getId())).willReturn(mockPurchaseRequestCompaniesBMW);
+		given(purchaseRequestCompanyRepository.getAllByCompanyId(bmw_dealer.getId()))
+				.willReturn(mockPurchaseRequestCompaniesBMW);
 
-	 	ResponseEntity<List<GetPurchaseRequestCompanyResponse>> purchaseRequestCompanyResponse = purchaseRequestController.getPurchaseRequests("company_ABC");
+		ResponseEntity<List<GetPurchaseRequestCompanyResponse>> purchaseRequestCompanyResponse = purchaseRequestController
+				.getPurchaseRequests("company_ABC");
 
-		 assertNotNull(purchaseRequestCompanyResponse);
-		 assertTrue(purchaseRequestCompanyResponse.hasBody());
+		assertNotNull(purchaseRequestCompanyResponse);
+		assertTrue(purchaseRequestCompanyResponse.hasBody());
 
-		 assertEquals(purchaseRequestCompanyResponse.getBody().get(0), new GetPurchaseRequestCompanyResponse(ppr1));
-		 assertEquals(purchaseRequestCompanyResponse.getBody().get(1), new GetPurchaseRequestCompanyResponse(ppr5));
+		assertEquals(purchaseRequestCompanyResponse.getBody().get(0), new GetPurchaseRequestCompanyResponse(ppr1));
+		assertEquals(purchaseRequestCompanyResponse.getBody().get(1), new GetPurchaseRequestCompanyResponse(ppr5));
 
-		 assertEquals(purchaseRequestCompanyResponse.getStatusCode(), HttpStatus.OK);
-	 }
+		assertEquals(purchaseRequestCompanyResponse.getStatusCode(), HttpStatus.OK);
+	}
 
-	 @Test
-	 void getAllPurchaseRequestsForCompanyWithNonExistingIdTest() {
-		 ResponseEntity<List<GetPurchaseRequestCompanyResponse>> purchaseRequestCompanyResponse = purchaseRequestController.getPurchaseRequests("company_ABC_NotFound");
+	@Test
+	void getAllPurchaseRequestsForCompanyWithNonExistingIdTest() {
+		ResponseEntity<List<GetPurchaseRequestCompanyResponse>> purchaseRequestCompanyResponse = purchaseRequestController
+				.getPurchaseRequests("company_ABC_NotFound");
 
-		 assertNotNull(purchaseRequestCompanyResponse);
-		 assertTrue(purchaseRequestCompanyResponse.hasBody());
-		 assertTrue(purchaseRequestCompanyResponse.getBody().size() == 0);
+		assertNotNull(purchaseRequestCompanyResponse);
+		assertTrue(purchaseRequestCompanyResponse.hasBody());
+		assertTrue(purchaseRequestCompanyResponse.getBody().size() == 0);
 
-		 assertEquals(purchaseRequestCompanyResponse.getStatusCode(), HttpStatus.NOT_FOUND);
-	 }
+		assertEquals(purchaseRequestCompanyResponse.getStatusCode(), HttpStatus.NOT_FOUND);
+	}
 
 }
