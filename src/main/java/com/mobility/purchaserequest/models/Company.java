@@ -3,13 +3,14 @@ package com.mobility.purchaserequest.models;
 import javax.persistence.*;
 
 import lombok.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "company")
-public class Company {
+public class Company implements Serializable {
 	// Id (primary key)
 	@Id
 	@Setter(AccessLevel.PROTECTED)

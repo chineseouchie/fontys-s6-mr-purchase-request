@@ -1,7 +1,7 @@
 package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
-
+import java.io.Serializable;
 import lombok.*;
 import org.json.JSONObject;
 
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 @Setter
 @NoArgsConstructor
 @Table(name = "vehicle")
-public class Vehicle {
+public class Vehicle implements Serializable {
 	// Vehicle id
 	@Id
 	@Setter(AccessLevel.PROTECTED)

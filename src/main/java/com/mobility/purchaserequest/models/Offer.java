@@ -6,13 +6,14 @@ import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
 import lombok.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "offer")
-public class Offer {
+public class Offer implements Serializable {
 	// Id (primary key)
 	@Id
 	@Setter(AccessLevel.PROTECTED)
