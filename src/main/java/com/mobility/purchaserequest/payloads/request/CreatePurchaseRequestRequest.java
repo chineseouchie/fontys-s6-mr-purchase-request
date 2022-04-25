@@ -1,7 +1,6 @@
 package com.mobility.purchaserequest.payloads.request;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;

@@ -1,13 +1,10 @@
 package com.mobility.purchaserequest.rabbitmq;
 
-import com.google.gson.Gson;
 import com.mobility.purchaserequest.models.Offer;
-import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
 import com.mobility.purchaserequest.repositories.OfferRepository;
-import com.mobility.purchaserequest.repositories.VehicleRepository;
+//import com.mobility.purchaserequest.repositories.VehicleRepository;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -23,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class OfferReceiveService {
 
     private static OfferRepository offerRepository;
-    private static VehicleRepository vehicleRepository;
+    // private static VehicleRepository vehicleRepository;
 
     private static final Dotenv env = Dotenv.load();
 
@@ -69,13 +66,13 @@ public class OfferReceiveService {
                     Vehicle vehicle = new Vehicle(jsonObject);
                     Offer offer = new Offer(jsonObject, vehicle);
                     offerRepository.save(offer);
-                }catch (JSONException err){
+                } catch (JSONException err) {
                     System.out.println("Error" + err.toString());
                 }
 
-//                Offer offer = new Offer(data.id, "Hoi", "hoi", data.vehicle, 1);
-//                vehicleRepository.save(data.vehicle);
-//                offerRepository.save(offer);
+                // Offer offer = new Offer(data.id, "Hoi", "hoi", data.vehicle, 1);
+                // vehicleRepository.save(data.vehicle);
+                // offerRepository.save(offer);
                 System.out.println(" [x] Offer received from RabbitMQ");
             } finally {
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -84,35 +81,37 @@ public class OfferReceiveService {
         };
         // doesn't automatically acknowledge the message when it is received
         boolean autoAck = false;
-        channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
+        channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {
+        });
     }
 
-//    public static void startReceiving() throws IOException, TimeoutException {
-//        ConnectionFactory factory = getFactory();
-//
-//        Connection connection = factory.newConnection();
-//        Channel channel = connection.createChannel();
-//
-//        // makes sure that the messages are saved for when RabbitMQ stops
-//        boolean durable = true;
-//        channel.queueDeclare("Offer.add", durable, false, false, null);
-//        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-//
-//        channel.basicQos(1);
-//
-//        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-//            try {
-//                String data = new String(delivery.getBody(), StandardCharsets.UTF_8);
-//                Offer offer = new Gson().fromJson(data, Offer.class);
-//                offerRepository.save(offer);
-//                System.out.println(" [x] Offer received from RabbitMQ");
-//            } finally {
-//                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-//                System.out.println(" [x] Done");
-//            }
-//        };
-//        // doesn't automatically acknowledge the message when it is received
-//        boolean autoAck = false;
-//        channel.basicConsume("Offer.add", autoAck, deliverCallback, consumerTag -> { });
-//    }
+    // public static void startReceiving() throws IOException, TimeoutException {
+    // ConnectionFactory factory = getFactory();
+    //
+    // Connection connection = factory.newConnection();
+    // Channel channel = connection.createChannel();
+    //
+    // // makes sure that the messages are saved for when RabbitMQ stops
+    // boolean durable = true;
+    // channel.queueDeclare("Offer.add", durable, false, false, null);
+    // System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+    //
+    // channel.basicQos(1);
+    //
+    // DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+    // try {
+    // String data = new String(delivery.getBody(), StandardCharsets.UTF_8);
+    // Offer offer = new Gson().fromJson(data, Offer.class);
+    // offerRepository.save(offer);
+    // System.out.println(" [x] Offer received from RabbitMQ");
+    // } finally {
+    // channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+    // System.out.println(" [x] Done");
+    // }
+    // };
+    // // doesn't automatically acknowledge the message when it is received
+    // boolean autoAck = false;
+    // channel.basicConsume("Offer.add", autoAck, deliverCallback, consumerTag -> {
+    // });
+    // }
 }
