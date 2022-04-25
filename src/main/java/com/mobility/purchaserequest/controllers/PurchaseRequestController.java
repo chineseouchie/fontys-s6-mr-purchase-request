@@ -61,7 +61,7 @@ public class PurchaseRequestController {
                 response.add(prbdr);
             }
 
-            return new ResponseEntity<>(response, httpStatusCode);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
