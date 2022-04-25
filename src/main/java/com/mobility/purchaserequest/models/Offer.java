@@ -2,6 +2,7 @@ package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
 
+import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
 import lombok.*;
@@ -51,5 +52,12 @@ public class Offer {
 		this.userUuid = userUuid;
 		this.vehicle = vehicle;
 		this.date = date;
+	}
+
+	public Offer(JSONObject jsonObject, Vehicle vehicle) {
+		this.uuid = jsonObject.getString("offerUuid");
+		this.userUuid = jsonObject.getJSONObject("customer").getString("uuid");
+		this.vehicle = vehicle;
+		this.date = jsonObject.getInt("creation_date");
 	}
 }
