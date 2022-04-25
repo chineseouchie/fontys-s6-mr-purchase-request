@@ -5,9 +5,6 @@ import java.util.*;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import lombok.*;
 
 @Entity
@@ -24,7 +21,7 @@ public class PurchaseRequest implements Serializable {
 	private Long id;
 
 	// Purchase request uuid (Microservice foreign key)
-	//@Setter(AccessLevel.PROTECTED)
+	// @Setter(AccessLevel.PROTECTED)
 	@Column(name = "purchase_request_uuid")
 	private String uuid;
 
