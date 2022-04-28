@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
@@ -47,26 +45,26 @@ public class PurchaseRequestController {
 
 	// Create a new purchase request
 	@PostMapping(path = "/create")
-	public ResponseEntity<Map<String, String>> create(@Valid @RequestBody CreatePurchaseRequestRequest request) {
+	public ResponseEntity<Map<String, String>> create(@RequestBody CreatePurchaseRequestRequest request) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 		responseBody.put("message", "Internal server error.");
 
 		try {
 			// Fetch the offer. And check if it's valid.
-			Offer offer = this.offerRepository.findByUuid(request.getOfferUuid());
-			if (offer != null && offer.getUuid().equals(request.getOfferUuid())) {
-
+			Offer offer = offerRepository.findByUuid(request.getOfferUuid());
+			if (offer != null) {
 				// Fetch all the companies the request will be created for.
 				List<Company> companies = new ArrayList<Company>();
 				for (String companyUuid : request.getCompanyUuids()) {
-					Company company = this.companyRepository.findByUuid(companyUuid);
+					Company company = companyRepository.findByUuid(companyUuid);
+					// TODO else gedeelte maken als company id niet bestaat + transaction.
 					if (company != null) {
 						companies.add(company);
 					}
 				}
 
-				if (companies != null && companies.size() != 0) {
+				if (companies.size() != 0) {
 					// Create the purchase request
 					PurchaseRequest purchaseRequest = new PurchaseRequest(
 							offer,
@@ -74,19 +72,19 @@ public class PurchaseRequestController {
 							request.getDeliveryPrice());
 
 					// Create a new entity for each company that receives the purchase request.
-					List<PurchaseRequestCompany> purchaseRequestsToCompanies = new ArrayList<PurchaseRequestCompany>();
+					List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<PurchaseRequestCompany>();
 					for (Company company : companies) {
 						PurchaseRequestCompany purchaseRequestCompany = new PurchaseRequestCompany(
 								company,
 								null,
 								purchaseRequest);
-						purchaseRequestsToCompanies.add(purchaseRequestCompany);
+						purchaseRequestsCompanies.add(purchaseRequestCompany);
 					}
 
 					// Save the purchase request
-					this.purchaseRequestRepository.save(purchaseRequest);
+					purchaseRequestRepository.save(purchaseRequest);
 					// Save the purchaseRequestCompanies
-					this.purchaseRequestCompanyRepository.saveAll(purchaseRequestsToCompanies);
+					purchaseRequestCompanyRepository.saveAll(purchaseRequestsCompanies);
 					httpStatus = HttpStatus.CREATED;
 					responseBody.put("message", "Succesfully created the purchase requests.");
 				} else {

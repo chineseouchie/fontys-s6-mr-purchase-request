@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.mobility.purchaserequest.models.PurchaseRequest;
@@ -15,7 +16,7 @@ import com.mobility.purchaserequest.models.Vehicle;
 public class PurchaseRequestResponse {
 	private String uuid;
 	private int delivery_date;
-	private BigInteger delivery_price;
+	private BigDecimal delivery_price;
 	private String brand;
 	private String model;
 	private String image_url;

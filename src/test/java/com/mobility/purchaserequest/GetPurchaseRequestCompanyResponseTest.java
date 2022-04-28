@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,7 @@ public class GetPurchaseRequestCompanyResponseTest {
         Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW",
                 "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
-
-        bmw_dealer = new Company(longValue(1),"company_ABC", "BMW Dealer");
+        bmw_dealer = new Company(longValue(1), "company_ABC", "BMW Dealer");
         audi_dealer = new Company("company_DEF", "Audi Dealer");
         opel_dealer = new Company("company_GHI", "Opel Dealer");
         tesla_dealer = new Company("company_JKL", "Tesla Dealer");
@@ -55,10 +55,8 @@ public class GetPurchaseRequestCompanyResponseTest {
         Offer offerGHI = new Offer("offerGHI", "user_RST", vectra, 1649404689, "red");
         Offer offerJKL = new Offer("offerJKL", "user_TKJ", model_s, 1649404689, "red");
 
-
-        PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigInteger.valueOf(126690));
-        PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigInteger.valueOf(126690));
-
+        PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigDecimal.valueOf(126690));
+        PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigDecimal.valueOf(126690));
 
         ppr1 = new PurchaseRequestCompany("pprABC", bmw_dealer, prABC);
         PurchaseRequestCompany ppr2 = new PurchaseRequestCompany("pprDEF", audi_dealer, prABC);
@@ -94,7 +92,8 @@ public class GetPurchaseRequestCompanyResponseTest {
 
     @Test
     void constructorNullTest() {
-        GetPurchaseRequestCompanyResponse response = new GetPurchaseRequestCompanyResponse(new PurchaseRequestCompany());
+        GetPurchaseRequestCompanyResponse response = new GetPurchaseRequestCompanyResponse(
+                new PurchaseRequestCompany());
 
         assertNull(response.getUuid());
         assertNull(response.getDelivery_date());
@@ -107,7 +106,8 @@ public class GetPurchaseRequestCompanyResponseTest {
 
     @Test
     void convertPurchaseRequestCompanyList() {
-        List<GetPurchaseRequestCompanyResponse> list = GetPurchaseRequestCompanyResponse.convertPurchaseRequestCompanyList(mockPurchaseRequestCompanies);
+        List<GetPurchaseRequestCompanyResponse> list = GetPurchaseRequestCompanyResponse
+                .convertPurchaseRequestCompanyList(mockPurchaseRequestCompanies);
 
         assertEquals(list.size(), mockPurchaseRequestCompanies.size());
 
@@ -115,4 +115,3 @@ public class GetPurchaseRequestCompanyResponseTest {
         assertEquals(list.get(1), new GetPurchaseRequestCompanyResponse(mockPurchaseRequestCompanies.get(1)));
     }
 }
-
