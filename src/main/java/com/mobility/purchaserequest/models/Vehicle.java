@@ -2,6 +2,8 @@ package com.mobility.purchaserequest.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import org.json.JSONObject;
 
@@ -31,28 +33,22 @@ public class Vehicle implements Serializable {
 	@Column(name = "brand_name")
 	private String brandName;
 
-	// Color
-	@Column(name = "color")
-	private String color;
-
 	// Image url
 	@Column(name = "image_url")
 	private String imageUrl;
 
-	public Vehicle(long id, String uuid, String modelName, String brandName, String color, String imageUrl) {
+	public Vehicle(long id, String uuid, String modelName, String brandName, String imageUrl) {
 		this.id = id;
 		this.uuid = uuid;
 		this.modelName = modelName;
 		this.brandName = brandName;
-		this.color = color;
 		this.imageUrl = imageUrl;
 	}
 
-	public Vehicle(JSONObject jsonObject) {
-		this.id = jsonObject.getJSONObject("vehicle").getLong("vehicle_id");
-		this.uuid = jsonObject.getJSONObject("vehicle").getString("uuid");
-		this.modelName = jsonObject.getJSONObject("vehicle").getString("model");
-		this.brandName = "Fix Brandname Plox";
-		this.color = jsonObject.getString("color");
+	public Vehicle(String uuid, String modelName, String brandName, String imageUrl) {
+		this.uuid = uuid;
+		this.modelName = modelName;
+		this.brandName = brandName;
+		this.imageUrl = imageUrl;
 	}
 }
