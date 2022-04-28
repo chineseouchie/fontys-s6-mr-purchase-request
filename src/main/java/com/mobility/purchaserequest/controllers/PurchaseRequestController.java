@@ -7,10 +7,13 @@ import com.mobility.purchaserequest.rabbitmq.PurchaseRequestSendService;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(path = "/api/v1/purchase-request")
+@Transactional(rollbackOn = { SQLException.class })
 public class PurchaseRequestController {
 	private PurchaseRequestCompanyRepository purchaseRequestCompanyRepository;
 	private PurchaseRequestRepository purchaseRequestRepository;
@@ -47,25 +51,26 @@ public class PurchaseRequestController {
 	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping(path = "/create")
 	public ResponseEntity<Map<String, String>> create(@RequestBody CreatePurchaseRequestRequest request) {
+
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 		responseBody.put("message", "Internal server error.");
 
 		try {
 			// Fetch the offer. And check if it's valid.
-			Offer offer = offerRepository.findByUuid(request.getOfferUuid());
-			if (offer != null) {
+			Offer offer = this.offerRepository.findByUuid(request.getOfferUuid());
+			if (offer != null && offer.getUuid().equals(request.getOfferUuid())) {
+
 				// Fetch all the companies the request will be created for.
 				List<Company> companies = new ArrayList<Company>();
 				for (String companyUuid : request.getCompanyUuids()) {
-					Company company = companyRepository.findByUuid(companyUuid);
-					// TODO else gedeelte maken als company id niet bestaat + transaction.
+					Company company = this.companyRepository.findByUuid(companyUuid);
 					if (company != null) {
 						companies.add(company);
 					}
 				}
 
-				if (companies.size() != 0) {
+				if (companies != null && companies.size() != 0) {
 					// Create the purchase request
 					PurchaseRequest purchaseRequest = new PurchaseRequest(
 							offer,
@@ -73,19 +78,19 @@ public class PurchaseRequestController {
 							request.getDeliveryPrice());
 
 					// Create a new entity for each company that receives the purchase request.
-					List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<PurchaseRequestCompany>();
+					List<PurchaseRequestCompany> purchaseRequestsToCompanies = new ArrayList<PurchaseRequestCompany>();
 					for (Company company : companies) {
 						PurchaseRequestCompany purchaseRequestCompany = new PurchaseRequestCompany(
 								company,
 								null,
 								purchaseRequest);
-						purchaseRequestsCompanies.add(purchaseRequestCompany);
+						purchaseRequestsToCompanies.add(purchaseRequestCompany);
 					}
 
 					// Save the purchase request
-					purchaseRequestRepository.save(purchaseRequest);
+					this.purchaseRequestRepository.save(purchaseRequest);
 					// Save the purchaseRequestCompanies
-					purchaseRequestCompanyRepository.saveAll(purchaseRequestsCompanies);
+					this.purchaseRequestCompanyRepository.saveAll(purchaseRequestsToCompanies);
 					httpStatus = HttpStatus.CREATED;
 					responseBody.put("message", "Succesfully created the purchase requests.");
 				} else {
@@ -190,6 +195,7 @@ public class PurchaseRequestController {
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatusCode;
 		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
+
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
 		String companyUuid = jwt;
