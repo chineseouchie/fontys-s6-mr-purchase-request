@@ -40,19 +40,25 @@ public class Offer implements Serializable {
 	@Nullable
 	private int date;
 
-	public Offer(Long id, String uuid, String userUuid, Vehicle vehicle, int date) {
+	// Color of vehicle in offer
+	@Column(name = "vehicle_color")
+	private String color;
+
+	public Offer(Long id, String uuid, String userUuid, Vehicle vehicle, int date, String color) {
 		this.id = id;
 		this.uuid = uuid;
 		this.userUuid = userUuid;
 		this.vehicle = vehicle;
 		this.date = date;
+		this.color = color;
 	}
 
-	public Offer(String uuid, String userUuid, Vehicle vehicle, int date) {
+	public Offer(String uuid, String userUuid, Vehicle vehicle, int date, String color) {
 		this.uuid = uuid;
 		this.userUuid = userUuid;
 		this.vehicle = vehicle;
 		this.date = date;
+		this.color = color;
 	}
 
 	public Offer(JSONObject jsonObject, Vehicle vehicle) {
@@ -60,5 +66,6 @@ public class Offer implements Serializable {
 		this.userUuid = jsonObject.getJSONObject("customer").getString("uuid");
 		this.vehicle = vehicle;
 		this.date = jsonObject.getInt("creation_date");
+		this.color = jsonObject.getString("color");
 	}
 }

@@ -36,13 +36,13 @@ public class GetPurchaseRequestCompanyResponseTest {
     @BeforeEach
     private void init() {
 
-        Vehicle s6 = new Vehicle(2, "vehicle_DEF", "S6", "Audi", "Blue",
+        Vehicle s6 = new Vehicle(2, "vehicle_DEF", "S6", "Audi",
                 "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-        Vehicle vectra = new Vehicle(3, "vehicle_GHI", "Vectra", "Opel", "red",
+        Vehicle vectra = new Vehicle(3, "vehicle_GHI", "Vectra", "Opel",
                 "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-        Vehicle model_s = new Vehicle(4, "vehicle_JKL", "Model S", "Tesla", "red",
+        Vehicle model_s = new Vehicle(4, "vehicle_JKL", "Model S", "Tesla",
                 "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
-        Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW", "red",
+        Vehicle m5 = new Vehicle(5, "vehicle_MNO", "vehicle_M5", "BMW",
                 "https://res.cloudinary.com/directlease/image/fetch/t_transp,f_png,dpr_auto/https://images.directlease.nl/jato_nl/Photo400/BMW/SERIES%203/2022/4SA%20M3_315.JPG");
 
         bmw_dealer = new Company(longValue(1), "company_ABC", "BMW Dealer");
@@ -50,10 +50,10 @@ public class GetPurchaseRequestCompanyResponseTest {
         opel_dealer = new Company("company_GHI", "Opel Dealer");
         tesla_dealer = new Company("company_JKL", "Tesla Dealer");
 
-        Offer offerABC = new Offer("offerABC", "user_XYZ", m5, 1649404689);
-        Offer offerDEF = new Offer("offerDEF", "user_UVW", s6, 1649404689);
-        Offer offerGHI = new Offer("offerGHI", "user_RST", vectra, 1649404689);
-        Offer offerJKL = new Offer("offerJKL", "user_TKJ", model_s, 1649404689);
+        Offer offerABC = new Offer("offerABC", "user_XYZ", m5, 1649404689, "Blue");
+        Offer offerDEF = new Offer("offerDEF", "user_UVW", s6, 1649404689, "red");
+        Offer offerGHI = new Offer("offerGHI", "user_RST", vectra, 1649404689, "red");
+        Offer offerJKL = new Offer("offerJKL", "user_TKJ", model_s, 1649404689, "red");
 
         PurchaseRequest prABC = new PurchaseRequest("prABC", offerABC, 1650404689, BigDecimal.valueOf(126690));
         PurchaseRequest prDEF = new PurchaseRequest("prDEF", offerDEF, 1650494689, BigDecimal.valueOf(126690));
