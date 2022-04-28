@@ -1,21 +1,19 @@
 package com.mobility.purchaserequest;
 
 import com.mobility.purchaserequest.models.*;
-import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.aspectj.runtime.internal.Conversions.longValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
@@ -81,7 +79,7 @@ public class GetPurchaseRequestCompanyResponseTest {
     void constructorTest() {
         GetPurchaseRequestCompanyResponse response = new GetPurchaseRequestCompanyResponse(ppr1);
 
-        assertEquals(response.getUuid(), ppr1.getUuid());
+        assertEquals(response.getPurchase_request_company_uuid(), ppr1.getUuid());
         assertEquals(response.getDelivery_date(), ppr1.getPurchaseRequest().getDeliveryDate());
         assertEquals(response.getDelivery_price(), ppr1.getPurchaseRequest().getDeliveryPrice());
         assertEquals(response.getPurchase_request_uuid(), ppr1.getPurchaseRequest().getUuid());
@@ -95,7 +93,7 @@ public class GetPurchaseRequestCompanyResponseTest {
         GetPurchaseRequestCompanyResponse response = new GetPurchaseRequestCompanyResponse(
                 new PurchaseRequestCompany());
 
-        assertNull(response.getUuid());
+        assertNull(response.getPurchase_request_company_uuid());
         assertNull(response.getDelivery_date());
         assertNull(response.getDelivery_price());
         assertNull(response.getPurchase_request_uuid());

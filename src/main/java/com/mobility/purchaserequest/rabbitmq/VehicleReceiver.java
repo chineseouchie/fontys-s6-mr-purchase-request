@@ -72,8 +72,12 @@ public class VehicleReceiver {
             GsonBuilder gsonBldr = new GsonBuilder();
             gsonBldr.registerTypeAdapter(Vehicle.class, new VehicleDeserializer());
             Vehicle vehicle = gsonBldr.create().fromJson(data, Vehicle.class);
-            vehicleRepository.save(vehicle);
-            System.out.println(" [x] Vehicle received from RabbitMQ " + data);
+            if(vehicleRepository.findByUuid(vehicle.getUuid()) == null) {
+                vehicleRepository.save(vehicle);
+                System.out.println(" [x] Vehicle saved from RabbitMQ: " + data);
+            } else {
+                System.out.println(" [x] Vehicle skipped from RabbitMQ (Duplicate): " + data);
+            }
         } finally {
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
             System.out.println(" [x] Done");

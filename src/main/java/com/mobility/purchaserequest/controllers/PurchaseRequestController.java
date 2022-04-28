@@ -1,7 +1,8 @@
 package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
-import com.mobility.purchaserequest.payloads.request.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyResponse;
+import com.mobility.purchaserequest.payloads.response.DealerResponse;
 import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
 import com.mobility.purchaserequest.rabbitmq.PurchaseRequestSendService;
 import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
@@ -89,9 +90,12 @@ public class PurchaseRequestController {
 					responseBody.put("message", "Succesfully created the purchase requests.");
 				} else {
 					httpStatus = HttpStatus.NOT_FOUND;
+					System.out.println("Invalid company uuid");
 					responseBody.put("message", "Invalid company uuid\'s.");
 				}
 			} else {
+				System.out.println("Invalid offer uuid.");
+
 				responseBody.put("message", "Invalid offer uuid.");
 				httpStatus = HttpStatus.NOT_FOUND;
 			}
@@ -202,9 +206,9 @@ public class PurchaseRequestController {
 		return new ResponseEntity<>(response, httpStatusCode);
 	}
 
-	@GetMapping("/{purchase_request_uuid}")
+	@GetMapping("/{purchase_request_company_uuid}")
 	public ResponseEntity<PurchaseRequestResponse> getSingle(
-			@PathVariable(value = "purchase_request_uuid") String uuid,
+			@PathVariable(value = "purchase_request_company_uuid") String uuid,
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
@@ -250,5 +254,21 @@ public class PurchaseRequestController {
 		}
 
 		return new ResponseEntity<List<PurchaseRequest>>(purchaseRequests, httpStatus);
+	}
+
+	@GetMapping("/dealers")
+	public ResponseEntity<List<DealerResponse>> getDealers() {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<DealerResponse> responses = new ArrayList<>();
+
+		try {
+			List<Company> companies = this.companyRepository.findAll();
+			responses = DealerResponse.convertCompanyToResponse(companies);
+			httpStatus = HttpStatus.OK;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<>(responses, httpStatus);
 	}
 }
