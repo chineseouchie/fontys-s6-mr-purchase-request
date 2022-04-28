@@ -28,10 +28,10 @@ public class PurchaseRequestResponse {
 		this.uuid = pr.getUuid();
 		this.delivery_date = pr.getDeliveryDate();
 		this.delivery_price = pr.getDeliveryPrice();
+		this.color = pr.getOffer().getColor();
 		this.brand = vehicle.getBrandName();
 		this.model = vehicle.getModelName();
 		this.image_url = vehicle.getImageUrl();
 		this.car_uuid = vehicle.getUuid();
-		this.color = vehicle.getColor();
 	}
 }
