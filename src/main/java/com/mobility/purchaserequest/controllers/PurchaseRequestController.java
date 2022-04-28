@@ -44,6 +44,7 @@ public class PurchaseRequestController {
 	}
 
 	// Create a new purchase request
+	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping(path = "/create")
 	public ResponseEntity<Map<String, String>> create(@RequestBody CreatePurchaseRequestRequest request) {
 
@@ -103,6 +104,7 @@ public class PurchaseRequestController {
 		return new ResponseEntity<Map<String, String>>(responseBody, httpStatus);
 	}
 
+	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping("/{purchase_request_uuid}/accept")
 	public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
 			@PathVariable(value = "purchase_request_uuid") String uuid,
@@ -110,6 +112,8 @@ public class PurchaseRequestController {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
+		// Todo: De companyUuid ophalen uit een echte jwt
+		// Nadat de authenticatie implementatie gereed is.
 		String companyUuid = jwt;
 
 		try {
@@ -124,6 +128,8 @@ public class PurchaseRequestController {
 			if (purchaseRequestToAccept != null && purchaseRequestToAccept.getUuid() != null) {
 				purchaseRequestToAccept.setAccepted(true);
 
+				// Vraag: Is het nodig dat de rest van de PurchaseRequestCompanies declined
+				// worden wanneer er een geaccepteerd wordt? -Jip
 				purchaseRequestCompanyRepository.save(purchaseRequestToAccept);
 
 			} else {
@@ -148,6 +154,8 @@ public class PurchaseRequestController {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
+		// Todo: De companyUuid ophalen uit een echte jwt
+		// Nadat de authenticatie implementatie gereed is.
 		String companyUuid = jwt;
 
 		try {
@@ -183,6 +191,8 @@ public class PurchaseRequestController {
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatusCode;
 		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
+		// Todo: De companyUuid ophalen uit een echte jwt
+		// Nadat de authenticatie implementatie gereed is.
 		String companyUuid = jwt;
 
 		Company company = companyRepository.findByUuid(companyUuid);
