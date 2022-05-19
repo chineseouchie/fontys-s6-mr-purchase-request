@@ -1,5 +1,7 @@
 package com.mobility.purchaserequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mobility.purchaserequest.controllers.PurchaseRequestController;
 import com.mobility.purchaserequest.models.*;
 import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyResponse;
@@ -20,9 +22,6 @@ import java.util.List;
 import static org.aspectj.runtime.internal.Conversions.longValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 public class PurchaseRequestControllerDealerSideTest {
@@ -108,7 +107,7 @@ public class PurchaseRequestControllerDealerSideTest {
 	}
 
 	@Test
-	void getAllPurchaseRequestsForCompanyTest() {
+	void getAllPurchaseRequestsForCompanyTest() throws JsonMappingException, JsonProcessingException {
 		given(companyRepository.findByUuid(bmw_dealer.getUuid())).willReturn(bmw_dealer);
 		given(purchaseRequestCompanyRepository.getAllByCompanyId(bmw_dealer.getId()))
 				.willReturn(mockPurchaseRequestCompaniesBMW);
@@ -126,7 +125,7 @@ public class PurchaseRequestControllerDealerSideTest {
 	}
 
 	@Test
-	void getAllPurchaseRequestsForCompanyWithNonExistingIdTest() {
+	void getAllPurchaseRequestsForCompanyWithNonExistingIdTest() throws JsonMappingException, JsonProcessingException {
 		ResponseEntity<List<GetPurchaseRequestCompanyResponse>> purchaseRequestCompanyResponse = purchaseRequestController
 				.getPurchaseRequests("company_ABC_NotFound");
 

@@ -16,13 +16,17 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mobility.purchaserequest.models.Company;
+import com.mobility.purchaserequest.models.Jwt;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.util.JwtParser;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +56,7 @@ public class PurchaseRequestController {
 	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping(path = "/create")
 	public ResponseEntity<Map<String, String>> create(@RequestBody CreatePurchaseRequestRequest request) {
+		System.out.println(request.getDeliveryPrice());
 
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
@@ -196,13 +201,15 @@ public class PurchaseRequestController {
 
 	@GetMapping(value = "/dealer/requests")
 	public ResponseEntity<List<GetPurchaseRequestCompanyResponse>> getPurchaseRequests(
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatusCode;
 		List<GetPurchaseRequestCompanyResponse> response = new ArrayList<>();
 
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
-		String companyUuid = jwt;
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 
 		Company company = companyRepository.findByUuid(companyUuid);
 
@@ -228,7 +235,6 @@ public class PurchaseRequestController {
 			@RequestHeader("authorization") String jwt) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
-
 		String companyUuid = jwt;
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
