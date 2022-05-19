@@ -13,7 +13,6 @@ public class JwtParser {
 		String[] chunks = token.split("\\.");
 		Base64.Decoder decoder = Base64.getUrlDecoder();
 
-		String header = new String(decoder.decode(chunks[0]));
 		String payload = new String(decoder.decode(chunks[1]));
 
 		ObjectMapper mapper = new ObjectMapper();

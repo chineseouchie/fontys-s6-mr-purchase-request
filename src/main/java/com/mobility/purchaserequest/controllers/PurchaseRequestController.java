@@ -232,16 +232,18 @@ public class PurchaseRequestController {
 	@GetMapping("/{purchase_request_company_uuid}")
 	public ResponseEntity<PurchaseRequestResponse> getSingle(
 			@PathVariable(value = "purchase_request_company_uuid") String uuid,
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
-		String companyUuid = jwt;
+
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
 					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
 
 			if (purchaseRequestCompany == null) {
-
 				httpStatus = HttpStatus.NOT_FOUND;
 			} else {
 				long purchaseRequestId = purchaseRequestCompany.getPurchaseRequest().getId();
