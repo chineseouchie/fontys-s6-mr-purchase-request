@@ -26,7 +26,7 @@ import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestReques
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
-import com.mobility.purchaserequest.util.JwtParser;
+import com.mobility.purchaserequest.utils.JwtParser;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +50,11 @@ public class PurchaseRequestController {
 		this.offerRepository = offerRepository;
 		this.companyRepository = companyRepository;
 		this.purchaseRequestCompanyRepository = purchaseRequestCompanyRepository;
+	}
+
+	@GetMapping()
+	public String index() {
+		return "Purchase Request service working";
 	}
 
 	// Create a new purchase request

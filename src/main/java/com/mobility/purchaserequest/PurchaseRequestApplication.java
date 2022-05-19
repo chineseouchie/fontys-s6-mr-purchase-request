@@ -17,7 +17,7 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PurchaseRequestApplication.class, args);
-		System.out.println("Purchase Request service ready.");
+		System.out.println("Purchase Request service ready. Port 8087");
 	}
 
 	@Override

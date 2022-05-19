@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.util;
+package com.mobility.purchaserequest.utils;
 
 import java.util.Base64;
 

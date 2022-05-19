@@ -14,8 +14,19 @@ services:
       - mr_purchase_request_db:/var/lib/mysql
     networks:
       - mobility
+
+  mr_purchase_request_cache:
+    image: redis:7.0.0-alpine
+    restart: always
+    ports:
+      - 6380:6379
+    command: redis-server --requirepass root
+    volumes:
+      - mr_purchase_request_cache:/data
+
 volumes:
   mr_purchase_request_db:
+  mr_purchase_request_cache:
 networks:
   mobility:
     name: mobility

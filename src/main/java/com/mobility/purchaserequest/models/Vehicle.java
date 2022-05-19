@@ -3,9 +3,7 @@ package com.mobility.purchaserequest.models;
 import javax.persistence.*;
 import java.io.Serializable;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.*;
-import org.json.JSONObject;
 
 @Entity
 @Getter
