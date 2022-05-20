@@ -1,6 +1,6 @@
 package com.mobility.purchaserequest.security;
 
-import com.mobility.purchaserequest.config.filters.JwtFilter;
+import com.mobility.purchaserequest.filters.JwtFilter;
 import com.mobility.purchaserequest.redis.JwtRedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().and()
 				.authorizeRequests().antMatchers("/api/v1/purchase-request/**").permitAll()
 				.anyRequest().authenticated();
+
 		http.addFilterAfter(
 				new JwtFilter(jwtRedis), BasicAuthenticationFilter.class);
+
 	}
 }

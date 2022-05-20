@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.config.filters;
+package com.mobility.purchaserequest.filters;
 
 import com.mobility.purchaserequest.rabbitmq.TokenSender;
 import com.mobility.purchaserequest.redis.JwtRedis;
@@ -42,13 +42,13 @@ public class JwtFilter extends GenericFilterBean {
 		} catch (Exception e) {
 			cachedToken = null;
 		}
-		System.out.println(cachedToken);
+		// System.out.println(cachedToken);
 
 		if (cachedToken == null) {
 			try {
 				String token = TokenSender.auth(requestToken);
 				if (!token.equals("")) {
-					System.out.println(token);
+					// System.out.println(token);
 					jwtRedis.save(token);
 					filterChain.doFilter(servletRequest, servletResponse);
 				}
