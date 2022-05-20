@@ -14,11 +14,10 @@ import com.mobility.purchaserequest.utils.JwtParser;
 import java.io.IOException;
 import java.util.List;
 
-public class IsAdminFilter implements Filter {
+public class IsEmployeeFilter implements Filter {
 
 	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -26,17 +25,17 @@ public class IsAdminFilter implements Filter {
 		Jwt jwt = new JwtParser().ParseToken(requestToken);
 		List<String> roles = jwt.getRoles();
 
-		System.out.println("Checking admin filter");
-		boolean allowed = roles.contains("Admin");
+		System.out.println("Checking employee filter");
+		boolean allowed = roles.contains("Employee");
 		
 		if (allowed) {
+			response.setStatus(HttpServletResponse.SC_OK);
+			request.getRequestDispatcher(request.getServletPath()).forward(request, response);
+			return;
+		} else {
 			filterChain.doFilter(servletRequest, servletResponse);
 		}
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		return;
-		
-			
-		
+	
 	}
 	
 	
