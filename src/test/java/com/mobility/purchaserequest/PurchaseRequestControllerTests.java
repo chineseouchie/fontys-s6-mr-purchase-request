@@ -1,10 +1,7 @@
 package com.mobility.purchaserequest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mobility.purchaserequest.controllers.PurchaseRequestController;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
-import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
@@ -12,7 +9,6 @@ import com.mobility.purchaserequest.repositories.OfferRepository;
 import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
 import com.mobility.purchaserequest.repositories.VehicleRepository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,19 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import net.bytebuddy.agent.VirtualMachine.ForHotSpot.Connection.Response;
 
-import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import java.math.BigInteger;
 
 @WebMvcTest
 @AutoConfigureMockMvc
