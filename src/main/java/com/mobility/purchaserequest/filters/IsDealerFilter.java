@@ -14,7 +14,7 @@ import com.mobility.purchaserequest.utils.JwtParser;
 import java.io.IOException;
 import java.util.List;
 
-public class IsAdminFilter implements Filter {
+public class IsDealerFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -25,17 +25,17 @@ public class IsAdminFilter implements Filter {
 		String requestToken = request.getHeader("Authorization");
 		Jwt jwt = new JwtParser().ParseToken(requestToken);
 		List<String> roles = jwt.getRoles();
+		System.out.println("Checking dealer filter");
 
-		System.out.println("Checking admin filter");
-		boolean allowed = roles.contains("Admin");
+		boolean allowed = roles.contains("Dealer");
 		
 		if (allowed) {
+			response.setStatus(HttpServletResponse.SC_OK);
+			request.getRequestDispatcher(request.getServletPath()).forward(request, response);
+			return;
+		} else {
 			filterChain.doFilter(servletRequest, servletResponse);
 		}
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		return;
-		
-			
 		
 	}
 	
