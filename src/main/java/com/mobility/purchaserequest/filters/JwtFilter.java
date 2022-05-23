@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 
-@Component
+//@Component
 public class JwtFilter extends GenericFilterBean {
 	private JwtRedis jwtRedis;
 

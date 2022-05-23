@@ -216,7 +216,7 @@ public class PurchaseRequestController {
 		System.out.println(token.getSub());
 		String companyUuid = token.getSub();
 
-		Company company = companyRepository.findByUuid(companyUuid);
+		Company company = companyRepository.findByUuid("company_ABC");
 
 		try {
 			if (company != null) {
