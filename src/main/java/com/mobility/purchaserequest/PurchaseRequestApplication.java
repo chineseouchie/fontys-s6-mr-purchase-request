@@ -2,7 +2,8 @@ package com.mobility.purchaserequest;
 
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.rabbitmq.OfferReceiver;
-
+import com.mobility.purchaserequest.rabbitmq.Rabbitmq;
+import com.mobility.purchaserequest.rabbitmq.UserReceiver;
 import com.mobility.purchaserequest.rabbitmq.VehicleReceiver;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,20 @@ public class PurchaseRequestApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// Rabbitmq rabbit = new Rabbitmq();
+
 		VehicleReceiver.init();
 		OfferReceiver.init();
+		UserReceiver.init();
 
 		Company bmw_dealer = new Company("company_ABC", "BMW Dealer");
 		Company audi_dealer = new Company("company_DEF", "Audi Dealer");
 		Company opel_dealer = new Company("company_GHI", "Opel Dealer");
 		Company tesla_dealer = new Company("company_JKL", "Tesla Dealer");
 
-		companyRepository.save(bmw_dealer);
-		companyRepository.save(audi_dealer);
-		companyRepository.save(opel_dealer);
-		companyRepository.save(tesla_dealer);
+		// companyRepository.save(bmw_dealer);
+		// companyRepository.save(audi_dealer);
+		// companyRepository.save(opel_dealer);
+		// companyRepository.save(tesla_dealer);
 	}
 }
