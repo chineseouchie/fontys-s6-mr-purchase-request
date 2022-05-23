@@ -19,70 +19,71 @@ import java.util.concurrent.TimeoutException;
 @Component
 public class OfferReceiver {
 
-    private static OfferRepository offerRepository;
-    private static VehicleRepository vehicleRepository;
+	private static OfferRepository offerRepository;
+	private static VehicleRepository vehicleRepository;
 
-    private static final Dotenv env = Dotenv.load();
+	private static final Dotenv env = Dotenv.load();
 
-    private static final String EXCHANGE_NAME = "offer_exchange";
+	private static final String EXCHANGE_NAME = "offer_exchange";
 
-    private static Channel channel;
+	private static Channel channel;
 
-    static {
-        try {
-            if (channel == null) {
-                channel = getFactory().newConnection().createChannel();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-    }
+	static {
+		try {
+			if (channel == null) {
+				channel = getFactory().newConnection().createChannel();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public OfferReceiver(VehicleRepository vehicleRepository, OfferRepository offerRepository) {
-        this.vehicleRepository = vehicleRepository;
-        this.offerRepository = offerRepository;
-    }
+	public OfferReceiver(VehicleRepository vehicleRepository, OfferRepository offerRepository) {
+		OfferReceiver.vehicleRepository = vehicleRepository;
+		OfferReceiver.offerRepository = offerRepository;
+	}
 
-    private static ConnectionFactory getFactory() {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(env.get("RABBITMQ_HOST"));
-        factory.setUsername(env.get("RABBITMQ_USER"));
-        factory.setPassword(env.get("RABBITMQ_PASSWORD"));
-        return factory;
-    }
+	private static ConnectionFactory getFactory() {
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setHost(env.get("RABBITMQ_HOST"));
+		factory.setUsername(env.get("RABBITMQ_USER"));
+		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		return factory;
+	}
 
-    public static void init() throws IOException {
-        receive("offer.add", createOffer);
-    }
+	public static void init() throws IOException {
+		receive("offer.add", createOffer);
+	}
 
-    private static void receive(String key, DeliverCallback deliverCallback) throws IOException {
-        channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-        String queueName = channel.queueDeclare().getQueue();
+	private static void receive(String key, DeliverCallback deliverCallback) throws IOException {
+		channel.exchangeDeclare(EXCHANGE_NAME, "topic");
+		String queueName = channel.queueDeclare().getQueue();
 
-        channel.queueBind(queueName, EXCHANGE_NAME, key);
-        // doesn't automatically acknowledge the message when it is received
-        boolean autoAck = false;
-        channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
-    }
+		channel.queueBind(queueName, EXCHANGE_NAME, key);
+		// doesn't automatically acknowledge the message when it is received
+		boolean autoAck = false;
+		channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {
+		});
+	}
 
-    private static DeliverCallback createOffer = (consumerTag, delivery) -> {
-        try {
-            String data = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            try {
-                System.out.println(data);
-                JSONObject jsonObject = new JSONObject(data);
-                Vehicle vehicle = vehicleRepository.findByUuid(jsonObject.getJSONObject("vehicle").getString("uuid"));
-                Offer offer = new Offer(jsonObject, vehicle);
-                offerRepository.save(offer);
-            }catch (JSONException err){
-                System.out.println("Error" + err.toString());
-            }
-            System.out.println(" [x] Offer received from RabbitMQ");
-        } finally {
-            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-            System.out.println(" [x] Done");
-        }
-    };
+	private static DeliverCallback createOffer = (consumerTag, delivery) -> {
+		try {
+			String data = new String(delivery.getBody(), StandardCharsets.UTF_8);
+			try {
+				System.out.println(data);
+				JSONObject jsonObject = new JSONObject(data);
+				Vehicle vehicle = vehicleRepository.findByUuid(jsonObject.getJSONObject("vehicle").getString("uuid"));
+				Offer offer = new Offer(jsonObject, vehicle);
+				offerRepository.save(offer);
+			} catch (JSONException err) {
+				System.out.println("Error" + err.toString());
+			}
+			System.out.println(" [x] Offer received from RabbitMQ");
+		} finally {
+			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+			System.out.println(" [x] Done");
+		}
+	};
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.repositories.CompanyRepository;
 import com.rabbitmq.client.Channel;
@@ -40,7 +39,7 @@ public class UserReceiver {
 	}
 
 	public UserReceiver(CompanyRepository companyRepository) {
-		this.companyRepository = companyRepository;
+		UserReceiver.companyRepository = companyRepository;
 	}
 
 	private static ConnectionFactory getFactory() {
