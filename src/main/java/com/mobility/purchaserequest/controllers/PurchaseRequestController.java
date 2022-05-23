@@ -136,7 +136,7 @@ public class PurchaseRequestController {
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
-					uuid, companyUuid);
+					uuid, "company_ABC");
 
 			if (purchaseRequestToAccept.getAccepted() != null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -246,7 +246,7 @@ public class PurchaseRequestController {
 		String companyUuid = token.getSub();
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
-					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
+					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, "company_ABC");
 
 			if (purchaseRequestCompany == null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -270,7 +270,7 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping("/byoffer/{offer_uuid}")
-	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) {
+	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) gy2{
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequest> purchaseRequests = new ArrayList<PurchaseRequest>();
 
