@@ -1,48 +1,45 @@
 package com.mobility.purchaserequest.rabbitmq;
 
-import com.mobility.purchaserequest.models.Offer;
-import com.mobility.purchaserequest.models.Vehicle;
-import com.mobility.purchaserequest.repositories.OfferRepository;
-import com.mobility.purchaserequest.repositories.VehicleRepository;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.DeliverCallback;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
+import com.mobility.purchaserequest.models.Company;
+import com.mobility.purchaserequest.repositories.CompanyRepository;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Component;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
 @Component
-public class OfferReceiver {
-
-	private static OfferRepository offerRepository;
-	private static VehicleRepository vehicleRepository;
-
+public class UserReceiver {
 	private static final Dotenv env = Dotenv.load();
-
-	private static final String EXCHANGE_NAME = "offer_exchange";
-
+	private static CompanyRepository companyRepository;
+	private static final String EXCHANGE_NAME = "auth_exchange";
 	private static Channel channel;
 
 	static {
 		try {
 			if (channel == null) {
+				System.out.println("Trying to connect with RabbitMQ...");
 				channel = getFactory().newConnection().createChannel();
+				System.out.println("Connected with RabbitMQ");
 			}
 		} catch (IOException e) {
+			System.out.println("Failed to connect with RabbitMQ");
 			e.printStackTrace();
 		} catch (TimeoutException e) {
+			System.out.println("RabbitMQ timedout");
 			e.printStackTrace();
 		}
 	}
 
-	public OfferReceiver(VehicleRepository vehicleRepository, OfferRepository offerRepository) {
-		OfferReceiver.vehicleRepository = vehicleRepository;
-		OfferReceiver.offerRepository = offerRepository;
+	public UserReceiver(CompanyRepository companyRepository) {
+		UserReceiver.companyRepository = companyRepository;
 	}
 
 	private static ConnectionFactory getFactory() {
@@ -54,7 +51,7 @@ public class OfferReceiver {
 	}
 
 	public static void init() throws IOException {
-		receive("offer.add", createOffer);
+		receive("company.add", createUser);
 	}
 
 	private static void receive(String key, DeliverCallback deliverCallback) throws IOException {
@@ -68,22 +65,23 @@ public class OfferReceiver {
 		});
 	}
 
-	private static DeliverCallback createOffer = (consumerTag, delivery) -> {
+	private static DeliverCallback createUser = (consumerTag, delivery) -> {
 		try {
 			String data = new String(delivery.getBody(), StandardCharsets.UTF_8);
-			try {
-				System.out.println(data);
-				JSONObject jsonObject = new JSONObject(data);
-				Vehicle vehicle = vehicleRepository.findByUuid(jsonObject.getJSONObject("vehicle").getString("uuid"));
-				Offer offer = new Offer(jsonObject, vehicle);
-				offerRepository.save(offer);
-			} catch (JSONException err) {
-				System.out.println("Error" + err.toString());
+			JSONObject jsonObject = new JSONObject(data);
+			String name = jsonObject.get("name").toString();
+			String uuid = jsonObject.get("uuid").toString();
+
+			Company company = new Company(uuid, name);
+
+			if (companyRepository.findByUuid(company.getUuid()) == null) {
+				companyRepository.save(company);
 			}
-			System.out.println(" [x] Offer received from RabbitMQ");
+
 		} finally {
 			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 			System.out.println(" [x] Done");
 		}
+
 	};
 }
