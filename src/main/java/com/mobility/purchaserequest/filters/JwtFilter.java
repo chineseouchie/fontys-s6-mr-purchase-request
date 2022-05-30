@@ -3,6 +3,8 @@ package com.mobility.purchaserequest.filters;
 import com.mobility.purchaserequest.rabbitmq.TokenSender;
 import com.mobility.purchaserequest.redis.JwtRedis;
 import com.mobility.purchaserequest.utils.JwtParser;
+
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 
-//@Component
+@Component
 public class JwtFilter extends GenericFilterBean {
 	private JwtRedis jwtRedis;
 
@@ -30,7 +32,7 @@ public class JwtFilter extends GenericFilterBean {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
 		String requestToken = request.getHeader("Authorization");
-
+		System.out.println(requestToken);
 		if (requestToken == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;

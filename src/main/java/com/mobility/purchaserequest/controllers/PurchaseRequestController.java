@@ -52,11 +52,6 @@ public class PurchaseRequestController {
 		this.purchaseRequestCompanyRepository = purchaseRequestCompanyRepository;
 	}
 
-	@GetMapping()
-	public String index() {
-		return "Purchase Request service working";
-	}
-
 	// Create a new purchase request
 	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping(path = "/create")
@@ -126,17 +121,19 @@ public class PurchaseRequestController {
 	@PostMapping("/{purchase_request_uuid}/accept")
 	public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
 			@PathVariable(value = "purchase_request_uuid") String uuid,
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
-		String companyUuid = jwt;
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
-					uuid, "company_ABC");
+					uuid, companyUuid);
 
 			if (purchaseRequestToAccept.getAccepted() != null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -168,13 +165,15 @@ public class PurchaseRequestController {
 	@PostMapping("/{purchase_request_uuid}/decline")
 	public ResponseEntity<Map<String, String>> declinePurchaseRequest(
 			@PathVariable(value = "purchase_request_uuid") String uuid,
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
-		String companyUuid = jwt;
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
@@ -216,7 +215,8 @@ public class PurchaseRequestController {
 		System.out.println(token.getSub());
 		String companyUuid = token.getSub();
 
-		Company company = companyRepository.findByUuid("company_ABC");
+		System.out.println(companyUuid);
+		Company company = companyRepository.findByUuid(companyUuid);
 
 		try {
 			if (company != null) {
@@ -246,7 +246,7 @@ public class PurchaseRequestController {
 		String companyUuid = token.getSub();
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
-					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, "company_ABC");
+					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
 
 			if (purchaseRequestCompany == null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -270,7 +270,7 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping("/byoffer/{offer_uuid}")
-	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) gy2{
+	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequest> purchaseRequests = new ArrayList<PurchaseRequest>();
 
@@ -289,7 +289,6 @@ public class PurchaseRequestController {
 	public ResponseEntity<List<DealerResponse>> getDealers() {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<DealerResponse> responses = new ArrayList<>();
-
 		try {
 			List<Company> companies = this.companyRepository.findAll();
 			responses = DealerResponse.convertCompanyToResponse(companies);
@@ -300,4 +299,35 @@ public class PurchaseRequestController {
 
 		return new ResponseEntity<>(responses, httpStatus);
 	}
+
+	@GetMapping
+	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequestsa() {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<PurchaseRequestResponse> purchaseRequests = new ArrayList<>();
+
+		try {
+			List<PurchaseRequest> list = this.purchaseRequestRepository.findAll();
+			purchaseRequests = PurchaseRequestResponse.convertList(list);
+			httpStatus = HttpStatus.OK;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<>(purchaseRequests, httpStatus);
+	}
+
+	@GetMapping("{purchase_request_uuid}/companies")
+	public ResponseEntity<List<PurchaseRequestCompany>> getPurchaseRequestCompanies(@PathVariable(value = "purchase_request_uuid") String uuid) {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<>();
+		try {
+			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository.findAllByPurchaseRequestUuid(uuid);
+			httpStatus = HttpStatus.OK;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<>(purchaseRequestsCompanies, httpStatus);
+	}
+
 }
