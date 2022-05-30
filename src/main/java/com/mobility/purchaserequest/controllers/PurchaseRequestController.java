@@ -52,11 +52,6 @@ public class PurchaseRequestController {
 		this.purchaseRequestCompanyRepository = purchaseRequestCompanyRepository;
 	}
 
-	@GetMapping()
-	public String index() {
-		return "Purchase Request service working";
-	}
-
 	// Create a new purchase request
 	// Todo: Wijzig naar een PUT request (we updaten een bestaande entiteit)
 	@PostMapping(path = "/create")
@@ -270,7 +265,7 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping("/byoffer/{offer_uuid}")
-	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) gy2{
+	public ResponseEntity<List<PurchaseRequest>> getByOffer(@PathVariable(value = "offer_uuid") String offerUuid) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequest> purchaseRequests = new ArrayList<PurchaseRequest>();
 
@@ -299,5 +294,35 @@ public class PurchaseRequestController {
 		}
 
 		return new ResponseEntity<>(responses, httpStatus);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequests() {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<PurchaseRequestResponse> purchaseRequests = new ArrayList<>();
+
+		try {
+			List<PurchaseRequest> list = this.purchaseRequestRepository.findAll();
+			purchaseRequests = PurchaseRequestResponse.convertList(list);
+			httpStatus = HttpStatus.OK;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<>(purchaseRequests, httpStatus);
+	}
+
+	@GetMapping("{purchase_request_uuid}/companies")
+	public ResponseEntity<List<PurchaseRequestCompany>> getPurchaseRequestCompanies(@PathVariable(value = "purchase_request_uuid") String uuid) {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<>();
+		try {
+			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository.findAllByPurchaseRequestUuid(uuid);
+			httpStatus = HttpStatus.OK;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return new ResponseEntity<>(purchaseRequestsCompanies, httpStatus);
 	}
 }

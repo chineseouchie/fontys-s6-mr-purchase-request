@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
@@ -32,5 +34,13 @@ public class PurchaseRequestResponse {
 		this.model = vehicle.getModelName();
 		this.image_url = vehicle.getImageUrl();
 		this.car_uuid = vehicle.getUuid();
+	}
+
+	public static List<PurchaseRequestResponse> convertList (List<PurchaseRequest> list) {
+		List<PurchaseRequestResponse> result = new ArrayList<>();
+		list.forEach((request) -> {
+			result.add(new PurchaseRequestResponse(request));
+		});
+		return result;
 	}
 }
