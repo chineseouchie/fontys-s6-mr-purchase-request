@@ -53,6 +53,7 @@ public class JwtFilter extends GenericFilterBean {
 					// System.out.println(token);
 					jwtRedis.save(token);
 					filterChain.doFilter(servletRequest, servletResponse);
+					return;
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -60,6 +61,7 @@ public class JwtFilter extends GenericFilterBean {
 		} else {
 			if (Long.parseLong(new JwtParser().ParseToken(cachedToken).getExp()) > Instant.now().getEpochSecond()) {
 				filterChain.doFilter(servletRequest, servletResponse);
+				return;
 			}
 		}
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
