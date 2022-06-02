@@ -37,7 +37,7 @@ public class PurchaseRequestCompany implements Serializable {
 	@Nullable
 	private Boolean accepted;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "purchase_request_id")
 	private PurchaseRequest purchaseRequest;
 

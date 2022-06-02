@@ -13,4 +13,6 @@ public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest
 	PurchaseRequest findByUuid(String purchase_request_uuid);
 
 	List<PurchaseRequest> findListByOffer(Offer offer);
+
+	void deleteByUuid(String uuid);
 }

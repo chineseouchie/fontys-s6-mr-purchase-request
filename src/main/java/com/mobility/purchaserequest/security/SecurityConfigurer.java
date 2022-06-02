@@ -27,5 +27,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.addFilterAfter(
 				new JwtFilter(jwtRedis), BasicAuthenticationFilter.class);
 
+
 	}
 }
