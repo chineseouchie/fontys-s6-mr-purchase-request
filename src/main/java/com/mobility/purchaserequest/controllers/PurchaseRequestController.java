@@ -318,11 +318,13 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping("{purchase_request_uuid}/companies")
-	public ResponseEntity<List<PurchaseRequestCompany>> getPurchaseRequestCompanies(@PathVariable(value = "purchase_request_uuid") String uuid) {
+	public ResponseEntity<List<PurchaseRequestCompany>> getPurchaseRequestCompanies(
+			@PathVariable(value = "purchase_request_uuid") String uuid) {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<>();
 		try {
-			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository.findAllByPurchaseRequestUuidAndAcceptedIsTrue(uuid);
+			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository
+					.findAllByPurchaseRequestUuidAndAcceptedIsTrue(uuid);
 			httpStatus = HttpStatus.OK;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -332,17 +334,20 @@ public class PurchaseRequestController {
 	}
 
 	@PutMapping("assign")
-	public ResponseEntity<String> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) throws IOException {
+	public ResponseEntity<String> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request)
+			throws IOException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		String message = "";
 
 		try {
-			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository.getByUuid(request.getPurchase_request_company_uuid());
+			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
+					.getByUuid(request.getPurchase_request_company_uuid());
 
-			if(purchaseRequestCompany != null) {
+			if (purchaseRequestCompany != null) {
 				PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestCompany);
 				purchaseRequestRepository.delete(purchaseRequestCompany.getPurchaseRequest());
-				purchaseRequestCompanyRepository.deleteAllByPurchaseRequestId(purchaseRequestCompany.getPurchaseRequest().getId());
+				purchaseRequestCompanyRepository
+						.deleteAllByPurchaseRequest(purchaseRequestCompany.getPurchaseRequest());
 
 				message = "the dealer received the purchase request";
 				httpStatus = HttpStatus.OK;
