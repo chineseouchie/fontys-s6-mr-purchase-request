@@ -342,6 +342,7 @@ public class PurchaseRequestController {
 			if(purchaseRequestCompany != null) {
 				PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestCompany);
 				purchaseRequestRepository.delete(purchaseRequestCompany.getPurchaseRequest());
+				purchaseRequestCompanyRepository.deleteAllByPurchaseRequestId(purchaseRequestCompany.getPurchaseRequest().getId());
 
 				message = "the dealer received the purchase request";
 				httpStatus = HttpStatus.OK;

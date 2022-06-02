@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mobility.purchaserequest.controllers.PurchaseRequestController;
 import com.mobility.purchaserequest.models.*;
-import com.mobility.purchaserequest.models.repositories.*;
 import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyResponse;
 import com.mobility.purchaserequest.repositories.*;
 import org.junit.jupiter.api.BeforeEach;

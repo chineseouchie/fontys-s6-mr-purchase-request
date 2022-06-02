@@ -22,4 +22,6 @@ public interface PurchaseRequestCompanyRepository extends JpaRepository<Purchase
 	List<PurchaseRequestCompany> findAllByCompanyUuid(String companyUuid);
 
 	List<PurchaseRequestCompany> findAllByPurchaseRequestUuidAndAcceptedIsTrue(String purchaseRequestUuid);
+
+	void deleteAllByPurchaseRequestId(Long id);
 }
