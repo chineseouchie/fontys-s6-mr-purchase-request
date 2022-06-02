@@ -11,6 +11,7 @@ import java.util.List;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.models.Vehicle;
 
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -43,4 +44,5 @@ public class PurchaseRequestResponse {
 		});
 		return result;
 	}
+
 }

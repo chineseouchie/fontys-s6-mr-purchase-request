@@ -122,17 +122,19 @@ public class PurchaseRequestController {
 	@PostMapping("/{purchase_request_uuid}/accept")
 	public ResponseEntity<Map<String, String>> acceptPurchaseRequest(
 			@PathVariable(value = "purchase_request_uuid") String uuid,
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
-		String companyUuid = jwt;
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
-					uuid, "company_ABC");
+					uuid, companyUuid);
 
 			if (purchaseRequestToAccept.getAccepted() != null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -164,13 +166,15 @@ public class PurchaseRequestController {
 	@PostMapping("/{purchase_request_uuid}/decline")
 	public ResponseEntity<Map<String, String>> declinePurchaseRequest(
 			@PathVariable(value = "purchase_request_uuid") String uuid,
-			@RequestHeader("authorization") String jwt) {
+			@RequestHeader("authorization") String jwt) throws JsonMappingException, JsonProcessingException {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		Map<String, String> responseBody = new HashMap<String, String>();
 
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
-		String companyUuid = jwt;
+		Jwt token = new JwtParser().ParseToken(jwt);
+		System.out.println(token.getSub());
+		String companyUuid = token.getSub();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
@@ -212,7 +216,8 @@ public class PurchaseRequestController {
 		System.out.println(token.getSub());
 		String companyUuid = token.getSub();
 
-		Company company = companyRepository.findByUuid("company_ABC");
+		System.out.println(companyUuid);
+		Company company = companyRepository.findByUuid(companyUuid);
 
 		try {
 			if (company != null) {
@@ -242,7 +247,7 @@ public class PurchaseRequestController {
 		String companyUuid = token.getSub();
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
-					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, "company_ABC");
+					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);
 
 			if (purchaseRequestCompany == null) {
 				httpStatus = HttpStatus.NOT_FOUND;
@@ -285,7 +290,6 @@ public class PurchaseRequestController {
 	public ResponseEntity<List<DealerResponse>> getDealers() {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<DealerResponse> responses = new ArrayList<>();
-
 		try {
 			List<Company> companies = this.companyRepository.findAll();
 			responses = DealerResponse.convertCompanyToResponse(companies);
@@ -298,7 +302,7 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequests() {
+	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequestsa() {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequestResponse> purchaseRequests = new ArrayList<>();
 
@@ -328,7 +332,7 @@ public class PurchaseRequestController {
 	}
 
 	@PutMapping("assign")
-	public ResponseEntity<> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) {
-
+	public ResponseEntity<String> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) {
+		return new ResponseEntity<>("test", HttpStatus.OK);
 	}
 }
