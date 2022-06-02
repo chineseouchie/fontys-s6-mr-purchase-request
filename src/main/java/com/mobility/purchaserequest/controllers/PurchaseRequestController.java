@@ -1,6 +1,7 @@
 package com.mobility.purchaserequest.controllers;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
+import com.mobility.purchaserequest.payloads.request.AssignPurchaseRequestRequest;
 import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyResponse;
 import com.mobility.purchaserequest.payloads.response.DealerResponse;
 import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
@@ -317,12 +318,17 @@ public class PurchaseRequestController {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequestCompany> purchaseRequestsCompanies = new ArrayList<>();
 		try {
-			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository.findAllByPurchaseRequestUuid(uuid);
+			purchaseRequestsCompanies = this.purchaseRequestCompanyRepository.findAllByPurchaseRequestUuidAndAcceptedIsTrue(uuid);
 			httpStatus = HttpStatus.OK;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		return new ResponseEntity<>(purchaseRequestsCompanies, httpStatus);
+	}
+
+	@PutMapping("assign")
+	public ResponseEntity<> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) {
+
 	}
 }
