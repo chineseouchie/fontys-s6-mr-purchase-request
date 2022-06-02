@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 import com.mobility.purchaserequest.models.Company;
-import com.mobility.purchaserequest.repositories.CompanyRepository;
+import com.mobility.purchaserequest.models.repositories.CompanyRepository;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;

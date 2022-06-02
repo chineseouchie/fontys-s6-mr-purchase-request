@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.repositories;
+package com.mobility.purchaserequest.models.repositories;
 
 import com.mobility.purchaserequest.models.Offer;
 

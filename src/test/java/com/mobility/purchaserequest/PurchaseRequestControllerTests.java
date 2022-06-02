@@ -4,10 +4,10 @@ import com.mobility.purchaserequest.models.Company;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.Vehicle;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
-import com.mobility.purchaserequest.repositories.CompanyRepository;
-import com.mobility.purchaserequest.repositories.OfferRepository;
-import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
-import com.mobility.purchaserequest.repositories.VehicleRepository;
+import com.mobility.purchaserequest.models.repositories.CompanyRepository;
+import com.mobility.purchaserequest.models.repositories.OfferRepository;
+import com.mobility.purchaserequest.models.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.models.repositories.VehicleRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

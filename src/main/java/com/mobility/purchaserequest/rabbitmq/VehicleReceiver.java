@@ -3,7 +3,7 @@ package com.mobility.purchaserequest.rabbitmq;
 import com.google.gson.GsonBuilder;
 import com.mobility.purchaserequest.deserializer.VehicleDeserializer;
 import com.mobility.purchaserequest.models.Vehicle;
-import com.mobility.purchaserequest.repositories.VehicleRepository;
+import com.mobility.purchaserequest.models.repositories.VehicleRepository;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;

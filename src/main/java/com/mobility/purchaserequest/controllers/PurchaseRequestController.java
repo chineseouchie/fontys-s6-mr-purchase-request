@@ -6,9 +6,10 @@ import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyR
 import com.mobility.purchaserequest.payloads.response.DealerResponse;
 import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
 import com.mobility.purchaserequest.rabbitmq.PurchaseRequestSendService;
-import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
+import com.mobility.purchaserequest.models.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ import com.mobility.purchaserequest.models.Jwt;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
-import com.mobility.purchaserequest.repositories.CompanyRepository;
-import com.mobility.purchaserequest.repositories.OfferRepository;
-import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.models.repositories.CompanyRepository;
+import com.mobility.purchaserequest.models.repositories.OfferRepository;
+import com.mobility.purchaserequest.models.repositories.PurchaseRequestRepository;
 import com.mobility.purchaserequest.utils.JwtParser;
 
 import org.springframework.http.HttpStatus;
@@ -152,7 +153,6 @@ public class PurchaseRequestController {
 				httpStatus = HttpStatus.NOT_FOUND;
 				responseBody.put("message", "invalid purchase request uuid");
 			}
-			PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestToAccept);
 
 			httpStatus = HttpStatus.OK;
 			responseBody.put("accepted-purchase-request-uuid", purchaseRequestToAccept.getUuid());
@@ -302,7 +302,7 @@ public class PurchaseRequestController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequestsa() {
+	public ResponseEntity<List<PurchaseRequestResponse>> getPurchaseRequests() {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		List<PurchaseRequestResponse> purchaseRequests = new ArrayList<>();
 
@@ -332,7 +332,30 @@ public class PurchaseRequestController {
 	}
 
 	@PutMapping("assign")
-	public ResponseEntity<String> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) {
-		return new ResponseEntity<>("test", HttpStatus.OK);
+	public ResponseEntity<String> assignPurchaseRequest(@RequestBody AssignPurchaseRequestRequest request) throws IOException {
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		String message = "";
+
+		try {
+			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
+					request.getPurchase_request_uuid(), request.getPurchase_request_company_uuid());
+
+			if(purchaseRequestToAccept != null) {
+				PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestToAccept);
+				purchaseRequestRepository.deleteByUuid(request.getPurchase_request_uuid());
+
+				message = "the dealer received the purchase request";
+				httpStatus = HttpStatus.OK;
+			} else {
+				message = "purchase request or dealer not found";
+				httpStatus = HttpStatus.NOT_FOUND;
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			message = "something went wrong...";
+		}
+
+		return new ResponseEntity<>(message, httpStatus);
 	}
 }
