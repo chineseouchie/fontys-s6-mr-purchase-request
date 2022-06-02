@@ -32,7 +32,6 @@ public class JwtFilter extends GenericFilterBean {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
 		String requestToken = request.getHeader("Authorization");
-		System.out.println(requestToken);
 		if (requestToken == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -44,13 +43,11 @@ public class JwtFilter extends GenericFilterBean {
 		} catch (Exception e) {
 			cachedToken = null;
 		}
-		// System.out.println(cachedToken);
 
 		if (cachedToken == null) {
 			try {
 				String token = TokenSender.auth(requestToken);
 				if (!token.equals("")) {
-					// System.out.println(token);
 					jwtRedis.save(token);
 					filterChain.doFilter(servletRequest, servletResponse);
 					return;

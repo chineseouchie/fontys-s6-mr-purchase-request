@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.models.repositories;
+package com.mobility.purchaserequest.repositories;
 
 import com.mobility.purchaserequest.models.PurchaseRequestCompany;
 import org.springframework.data.jpa.repository.JpaRepository;

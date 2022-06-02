@@ -6,7 +6,7 @@ import com.mobility.purchaserequest.payloads.response.GetPurchaseRequestCompanyR
 import com.mobility.purchaserequest.payloads.response.DealerResponse;
 import com.mobility.purchaserequest.payloads.response.PurchaseRequestResponse;
 import com.mobility.purchaserequest.rabbitmq.PurchaseRequestSendService;
-import com.mobility.purchaserequest.models.repositories.PurchaseRequestCompanyRepository;
+import com.mobility.purchaserequest.repositories.PurchaseRequestCompanyRepository;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -25,9 +25,9 @@ import com.mobility.purchaserequest.models.Jwt;
 import com.mobility.purchaserequest.models.Offer;
 import com.mobility.purchaserequest.models.PurchaseRequest;
 import com.mobility.purchaserequest.payloads.request.CreatePurchaseRequestRequest;
-import com.mobility.purchaserequest.models.repositories.CompanyRepository;
-import com.mobility.purchaserequest.models.repositories.OfferRepository;
-import com.mobility.purchaserequest.models.repositories.PurchaseRequestRepository;
+import com.mobility.purchaserequest.repositories.CompanyRepository;
+import com.mobility.purchaserequest.repositories.OfferRepository;
+import com.mobility.purchaserequest.repositories.PurchaseRequestRepository;
 import com.mobility.purchaserequest.utils.JwtParser;
 
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.mobility.purchaserequest.models.repositories;
+package com.mobility.purchaserequest.repositories;
 
 import java.util.List;
 
