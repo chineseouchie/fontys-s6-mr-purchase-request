@@ -337,12 +337,11 @@ public class PurchaseRequestController {
 		String message = "";
 
 		try {
-			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
-					request.getPurchase_request_uuid(), request.getPurchase_request_company_uuid());
+			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository.getByUuid(request.getPurchase_request_company_uuid());
 
-			if(purchaseRequestToAccept != null) {
-				PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestToAccept);
-				purchaseRequestRepository.deleteByUuid(request.getPurchase_request_uuid());
+			if(purchaseRequestCompany != null) {
+				PurchaseRequestSendService.publishAcceptedPurchaseRequest(purchaseRequestCompany);
+				purchaseRequestRepository.delete(purchaseRequestCompany.getPurchaseRequest());
 
 				message = "the dealer received the purchase request";
 				httpStatus = HttpStatus.OK;
