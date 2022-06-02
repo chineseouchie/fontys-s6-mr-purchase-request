@@ -1,0 +1,216 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prmicro
+
+---
+#Database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-pr
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mariadb-pr
+  type: ClusterIP
+
+---
+#Microservice service
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-pr-service
+spec:
+  ports:
+    # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+    - port: 8087
+      targetPort: 8087
+      # Optional field
+      # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+      nodePort: 30009
+  selector:
+    app: microservice-pr-app
+  type: NodePort
+
+---
+#Database deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-pr
+spec:
+  selector:
+    matchLabels:
+      app: mariadb-pr
+  template:
+    metadata:
+      labels:
+        app: mariadb-pr
+    spec:
+      containers:
+        - image: mariadb:10.7
+          name: mariadb-pr
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              value: root
+            - name: MARIADB_DATABASE
+              value: mr_pr_db
+            - name: MARIADB_PASSWORD
+              value: root
+            - name: MARIADB_USER
+              value: mobility
+          ports:
+            - containerPort: 3306
+              name: mariadb-pr
+          volumeMounts:
+            - name: mariadb-pr-persistent-storage
+              mountPath: /var/lib/mariadb-pr
+      volumes:
+        - name: mariadb-pr-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadb-pr-pv-claim
+
+---
+#Microservice deployment
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: microservice-pr-app
+spec:
+  selector:
+    matchLabels:
+      app: microservice-pr-app
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: microservice-pr-app
+    spec:
+      containers:
+        - name: microservice-pr-app
+          image: mobilityrentals6/prmicro:latest
+          env:
+            - name: MYSQL_HOST
+              value: mariadb-pr
+            - name: MYSQL_USER
+              value: mobility
+            - name: MYSQL_PASSWORD
+              value: root
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            - name: RABBITMQ_USER
+              value: admin
+            - name: RABBITMQ_PASS
+              value: root
+          resources:
+            limits:
+              cpu: "100m"
+            requests:
+              cpu: "10m"
+          ports:
+            - containerPort: 8087 # The port that the container is running on in the cluster
+
+---
+#Persistent volume for DB
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mariadb-pr-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: "/mnt/data"
+
+---
+#Persistent volume claim for DB
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pr-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+#RedisCash service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-pr
+spec:
+  clusterIP: None
+  ports:
+    - port: 6379
+      targetPort: 6379
+      name: redis-pr
+  selector:
+    app: redis-pr
+---
+#RedisCach deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pr
+spec:
+  selector:
+    matchLabels:
+      app: redis-pr
+  template:
+    metadata:
+      labels:
+        app: redis-pr
+    spec:
+      containers:
+        - image: redis:6.2.3-alpine
+          name: redis-pr
+          ports:
+            - containerPort: 6379
+              name: redis-pr
+          volumeMounts:
+            - name: redis-pr-persistent-storage
+              mountPath: /var/lib/redis-pr
+      volumes:
+        - name: redis-pr-persistent-storage
+          persistentVolumeClaim:
+            claimName: redis-pr-pv-claim
+---
+#Persistent volume for Redis
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-pr-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+#Persistent volume claim for Redis
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pr-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi

@@ -13,7 +13,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
 
 public class TokenSender {
-	private static final Dotenv env = Dotenv.load();
 
 	private static String REQUEST_QUEUE_NAME = "jwt_queue";
 
@@ -33,9 +32,9 @@ public class TokenSender {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(env.get("RABBITMQ_HOST"));
-		factory.setUsername(env.get("RABBITMQ_USER"));
-		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		factory.setHost("rabbitmq");
+		factory.setUsername("admin");
+		factory.setPassword("root");
 		return factory;
 	}
 
