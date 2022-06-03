@@ -31,7 +31,7 @@ public class Rabbitmq {
 
 	private ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("localhost");
+		factory.setHost("rabbitmq");
 		factory.setUsername("admin");
 		factory.setPassword("root");
 		return factory;

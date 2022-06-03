@@ -45,7 +45,7 @@ public class VehicleReceiver {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("localhost");
+		factory.setHost("rabbitmq");
 		factory.setUsername("admin");
 		factory.setPassword("root");
 		return factory;
