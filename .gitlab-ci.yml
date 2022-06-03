@@ -1,0 +1,38 @@
+image: openjdk:11
+variables:
+  MICROSERVICE: prmicro
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - kubernetes
+
+before_script:
+  - echo -n ${CI_REGISTRY_TOKEN}
+  - docker login -u "${CI_REGISTRY_USER}" -p ${CI_REGISTRY_TOKEN} ${CI_REGISTRY}
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - 'echo ${CI_REGISTRY_IMAGE}:$CI_COMMIT_SHA'
+    - 'docker build --tag ${CI_REGISTRY_IMAGE}:latest .'
+  only:
+    - servi-k8s
+
+docker-push-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - 'docker push ${CI_REGISTRY_IMAGE}:latest'
+  only:
+    - servi-k8s
+
+kubernetes-db-job:      # This job runs in thes deploy stage.
+  stage: kubernetes  # It only runs when *both* jobs in the test stage complete successfully.
+  script:
+    - microk8s kubectl delete deployment microservice-pr-app --ignore-not-found=true
+    - microk8s kubectl delete service microservice-pr-service --ignore-not-found=true
+    #    - kubectl delete --all hpa
+    - microk8s kubectl apply -f kubernetes.yaml
+  #    - kubectl apply -f hpa.yaml  #Loadbalancing
+  only:
+    - servi-k8s
+

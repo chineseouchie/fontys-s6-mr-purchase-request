@@ -11,8 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class PurchaseRequestSendService {
-	private static final Dotenv env = Dotenv.load();
-
 	private static final String EXCHANGE_NAME = "purchase_request_exchange";
 
 	private static Channel channel;
@@ -34,9 +32,9 @@ public class PurchaseRequestSendService {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(env.get("RABBITMQ_HOST"));
-		factory.setUsername(env.get("RABBITMQ_USER"));
-		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		factory.setHost("rabbitmq");
+		factory.setUsername("admin");
+		factory.setPassword("root");
 		return factory;
 	}
 

@@ -16,7 +16,6 @@ import java.util.concurrent.TimeoutException;
 
 @Component
 public class VehicleReceiver {
-	private static final Dotenv env = Dotenv.load();
 
 	private static VehicleRepository vehicleRepository;
 
@@ -46,9 +45,9 @@ public class VehicleReceiver {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(env.get("RABBITMQ_HOST"));
-		factory.setUsername(env.get("RABBITMQ_USER"));
-		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		factory.setHost("rabbitmq");
+		factory.setUsername("admin");
+		factory.setPassword("root");
 		return factory;
 	}
 

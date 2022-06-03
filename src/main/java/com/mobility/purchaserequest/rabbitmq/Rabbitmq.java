@@ -11,7 +11,6 @@ import lombok.Getter;
 
 @Getter
 public class Rabbitmq {
-	private final Dotenv env = Dotenv.load();
 	public Channel channel;
 
 	public Rabbitmq() {
@@ -32,9 +31,9 @@ public class Rabbitmq {
 
 	private ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(env.get("RABBITMQ_HOST"));
-		factory.setUsername(env.get("RABBITMQ_USER"));
-		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		factory.setHost("rabbitmq");
+		factory.setUsername("admin");
+		factory.setPassword("root");
 		return factory;
 	}
 }

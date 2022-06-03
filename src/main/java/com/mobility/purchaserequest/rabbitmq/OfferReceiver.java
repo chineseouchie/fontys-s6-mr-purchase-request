@@ -22,8 +22,6 @@ public class OfferReceiver {
 	private static OfferRepository offerRepository;
 	private static VehicleRepository vehicleRepository;
 
-	private static final Dotenv env = Dotenv.load();
-
 	private static final String EXCHANGE_NAME = "offer_exchange";
 
 	private static Channel channel;
@@ -47,9 +45,9 @@ public class OfferReceiver {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(env.get("RABBITMQ_HOST"));
-		factory.setUsername(env.get("RABBITMQ_USER"));
-		factory.setPassword(env.get("RABBITMQ_PASSWORD"));
+		factory.setHost("rabbitmq");
+		factory.setUsername("admin");
+		factory.setPassword("root");
 		return factory;
 	}
 
