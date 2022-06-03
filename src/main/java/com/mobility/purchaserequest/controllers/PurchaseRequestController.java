@@ -130,8 +130,8 @@ public class PurchaseRequestController {
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
 		Jwt token = new JwtParser().ParseToken(jwt);
-		System.out.println(token.getSub());
-		String companyUuid = token.getSub();
+		System.out.println(token.getUserUuid());
+		String companyUuid = token.getUserUuid();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
@@ -173,8 +173,8 @@ public class PurchaseRequestController {
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
 		Jwt token = new JwtParser().ParseToken(jwt);
-		System.out.println(token.getSub());
-		String companyUuid = token.getSub();
+		System.out.println(token.getUserUuid());
+		String companyUuid = token.getUserUuid();
 
 		try {
 			PurchaseRequestCompany purchaseRequestToAccept = purchaseRequestCompanyRepository.getByUuidAndCompanyUuid(
@@ -213,8 +213,8 @@ public class PurchaseRequestController {
 		// Todo: De companyUuid ophalen uit een echte jwt
 		// Nadat de authenticatie implementatie gereed is.
 		Jwt token = new JwtParser().ParseToken(jwt);
-		System.out.println(token.getSub());
-		String companyUuid = token.getSub();
+		System.out.println(token.getUserUuid());
+		String companyUuid = token.getUserUuid();
 
 		System.out.println(companyUuid);
 		Company company = companyRepository.findByUuid(companyUuid);
@@ -243,8 +243,8 @@ public class PurchaseRequestController {
 		PurchaseRequestResponse purchaseRequestResponse = new PurchaseRequestResponse();
 
 		Jwt token = new JwtParser().ParseToken(jwt);
-		System.out.println(token.getSub());
-		String companyUuid = token.getSub();
+		System.out.println(token.getUserUuid());
+		String companyUuid = token.getUserUuid();
 		try {
 			PurchaseRequestCompany purchaseRequestCompany = purchaseRequestCompanyRepository
 					.getByUuidAndCompanyUuidAndAcceptedIsNull(uuid, companyUuid);

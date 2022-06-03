@@ -13,6 +13,7 @@ public class Jwt {
 	private String exp;
 	private String iat;
 	private String sub;
+	private String userUuid;
 	private List<String> roles;
 
 }
