@@ -43,7 +43,7 @@ public class UserReceiver {
 
 	private static ConnectionFactory getFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("rabbitmq");
+		factory.setHost("localhost");
 		factory.setUsername("admin");
 		factory.setPassword("root");
 		return factory;
