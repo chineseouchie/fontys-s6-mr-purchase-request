@@ -75,9 +75,9 @@ public class VehicleReceiver {
 			Vehicle vehicle = gsonBldr.create().fromJson(data, Vehicle.class);
 			if (vehicleRepository.findByUuid(vehicle.getUuid()) == null) {
 				vehicleRepository.save(vehicle);
-				System.out.println(" [x] Vehicle saved from RabbitMQ: " + data);
+				System.out.println(" [x] Vehicle saved from RabbitMQ:");
 			} else {
-				System.out.println(" [x] Vehicle skipped from RabbitMQ (Duplicate): " + data);
+				System.out.println(" [x] Vehicle skipped from RabbitMQ (Duplicate):");
 			}
 		} finally {
 			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
